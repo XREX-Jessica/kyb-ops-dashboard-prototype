@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Case Detail — KYB Operations Dashboard</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 20px; }
+    .field-item { display: flex; flex-direction: column; gap: 3px; }
+    .field-item.full-width { grid-column: 1 / -1; }
+    .field-label { font-size: 11px; color: #8c8c8c; font-weight: 500; text-transform: uppercase; letter-spacing: 0.4px; }
+    .field-value { font-size: 13px; color: #1a1a1a; }
+    .field-value.muted { color: #8c8c8c; }
+    .field-value.editable { border-bottom: 1px dashed #d9d9d9; padding-bottom: 2px; cursor: pointer; }
+    .field-value.editable:hover { border-bottom-color: #1677ff; color: #1677ff; }
+    .section-sep { border: none; border-top: 1px solid #f0f0f0; margin: 14px 0; }
+    .case-hero { background: #fff; border-radius: 8px; padding: 18px 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); margin-bottom: 4px; }
+    .case-hero-top { display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+    .case-id { font-size: 22px; font-weight: 700; color: #1a1a1a; }
+    .case-company { font-size: 14px; color: #595959; margin-top: 2px; }
+    .case-customer { font-size: 12px; color: #8c8c8c; }
+    .contact-counter { display: flex; align-items: center; gap: 8px; }
+    .contact-counter .count { font-size: 20px; font-weight: 700; color: #1677ff; }
+    .state-change-select { padding: 5px 10px; border: 1px solid #1677ff; border-radius: 6px; font-size: 13px; color: #1677ff; cursor: pointer; background: #e6f4ff; }
+    .log-timeline { display: flex; flex-direction: column; gap: 0; }
+    .log-add-form { background: #fafafa; border: 1px solid #e8e8e8; border-radius: 6px; padding: 12px; margin-bottom: 16px; }
+    .log-add-form select, .log-add-form textarea { width: 100%; border: 1px solid #d9d9d9; border-radius: 4px; padding: 6px 8px; font-size: 12px; margin-bottom: 8px; }
+    .log-add-form textarea { min-height: 60px; resize: vertical; }
+    .responded-check { display: flex; align-items: center; gap: 8px; padding: 10px 14px; border: 1px solid #b7eb8f; border-radius: 6px; background: #f6ffed; cursor: pointer; }
+    .responded-check input { width: 16px; height: 16px; accent-color: #52c41a; }
+    .responded-check label { font-size: 13px; font-weight: 500; color: #389e0d; cursor: pointer; }
+  </style>
+</head>
+<body>
+<div class="app-layout">
+
+  <!-- ── Sidebar ── -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-label">XREX Pay</div>
+      <div class="logo-sub">Internal Operations CMS</div>
+    </div>
+    <div class="role-switcher">
+      <label>Demo role:</label>
+      <select id="role-select" onchange="switchRole(this.value)">
+        <option value="ops">Ops PM (Full Access)</option>
+        <option value="kyb">KYB Reviewer</option>
+        <option value="compliance">Compliance</option>
+        <option value="rm_sarah">RM — Sarah Lin</option>
+        <option value="rm_mike">RM — Mike Tan</option>
+        <option value="rm_tom">RM — Tom Chang</option>
+      </select>
+    </div>
+    <div class="nav-group-label">KYB Onboarding</div>
+    <div class="nav-item" onclick="window.location='index.html'"><span class="nav-icon">☰</span> All Cases</div>
+    <div class="nav-item" onclick="window.location='index.html'"><span class="nav-icon">👤</span> My Pipeline (RM)</div>
+    <div class="nav-item" onclick="window.location='index.html'"><span class="nav-icon">⏳</span> Waiting Customer</div>
+    <div class="nav-item active"><span class="nav-icon">⚡</span> Case Detail</div>
+    <div class="nav-group-label">Review Queues</div>
+    <div class="nav-item" onclick="window.location='index.html'"><span class="nav-icon">🔍</span> KYB Review Queue</div>
+    <div class="nav-item" onclick="window.location='index.html'"><span class="nav-icon">🛡</span> Compliance Queue</div>
+    <div class="nav-group-label">Operations</div>
+    <div class="nav-item" onclick="window.location='index.html'"><span class="nav-icon">🔴</span> Aging / Overdue</div>
+    <div class="nav-item" onclick="window.location='index.html'"><span class="nav-icon">📊</span> Management Overview</div>
+  </aside>
+
+  <!-- ── Main ── -->
+  <div class="main-content">
+    <div class="page-header">
+      <div class="header-left">
+        <div class="breadcrumb"><a href="index.html" style="color:#1677ff">KYB Onboarding</a> &rsaquo; <span id="breadcrumb-id">Case Detail</span></div>
+        <h1 class="page-title" id="page-title">Case Detail</h1>
+      </div>
+      <div class="header-right">
+        <span style="font-size:12px;color:#8c8c8c;">Viewing as: <strong id="role-badge">Ops PM</strong></span>
+        <button class="btn btn-ghost btn-sm" onclick="openDrawer('activity-drawer')" title="Activity Log">📋 Activity Log</button>
+        <a href="index.html" class="btn btn-default btn-sm">← Back to List</a>
+      </div>
+    </div>
+
+    <div class="content-area">
+      <div id="case-not-found" style="display:none;padding:60px;text-align:center;color:#8c8c8c;">Case not found. <a href="index.html" style="color:#1677ff">Return to list</a></div>
+      <div id="case-content">
+
+        <!-- Hero header -->
+        <div class="case-hero">
+          <div class="case-hero-top">
+            <div>
+              <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+                <span class="case-id" id="hero-id"></span>
+                <span id="hero-priority"></span>
+                <span id="hero-state"></span>
+                <span id="hero-aging"></span>
+              </div>
+              <div class="case-company" id="hero-company"></div>
+              <div class="case-customer" id="hero-customer"></div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:8px;align-items:flex-end">
+              <div style="font-size:12px;color:#8c8c8c">Change state:</div>
+              <select class="state-change-select" id="state-select" onchange="handleStateChange(this.value)">
+                <option value="">Select new state…</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action bar -->
+        <div class="action-bar" id="action-bar">
+          <span class="action-bar-title">Actions:</span>
+          <button class="btn btn-default btn-sm" id="btn-log-contact" onclick="logContactAttempt()">📞 Log Contact Attempt</button>
+          <div class="action-divider"></div>
+          <label class="responded-check" id="responded-check">
+            <input type="checkbox" id="responded-checkbox" onchange="handleCustomerResponded(this.checked)" />
+            <span>Customer Responded</span>
+          </label>
+          <div class="action-divider"></div>
+          <button class="btn btn-default btn-sm" onclick="openDrawer('activity-drawer')">📋 View Activity Log</button>
+          <div class="filter-spacer"></div>
+          <button class="btn btn-danger btn-sm" onclick="if(confirm('Mark this case as Abandoned?')) alert('Demo: Case would be set to Abandoned.')">⚠ Abandon Case</button>
+        </div>
+
+        <!-- Detail layout -->
+        <div class="detail-layout">
+          <!-- Left: field panels -->
+          <div class="detail-main">
+
+            <!-- Identification -->
+            <div class="panel">
+              <div class="panel-title">Identification</div>
+              <div class="field-grid">
+                <div class="field-item"><span class="field-label">Case ID</span><span class="field-value" id="f-id"></span></div>
+                <div class="field-item"><span class="field-label">Registration Date</span><span class="field-value" id="f-reg-date"></span></div>
+                <div class="field-item"><span class="field-label">Customer Name</span><span class="field-value" id="f-customer"></span></div>
+                <div class="field-item"><span class="field-label">Company Name</span><span class="field-value" id="f-company"></span></div>
+                <div class="field-item"><span class="field-label">RM Owner</span><span class="field-value" id="f-rm"></span></div>
+                <div class="field-item"><span class="field-label">Priority Flag</span><span class="field-value" id="f-priority"></span></div>
+              </div>
+            </div>
+
+            <!-- Lifecycle -->
+            <div class="panel">
+              <div class="panel-title">Lifecycle</div>
+              <div class="field-grid">
+                <div class="field-item"><span class="field-label">Current State</span><span class="field-value" id="f-state"></span></div>
+                <div class="field-item"><span class="field-label">Previous State</span><span class="field-value" id="f-prev-state"></span></div>
+                <div class="field-item"><span class="field-label">State Entry Date</span><span class="field-value" id="f-state-entry"></span></div>
+                <div class="field-item"><span class="field-label">Days in State</span><span class="field-value" id="f-days"></span></div>
+                <div class="field-item"><span class="field-label">Aging Flag</span><span class="field-value" id="f-aging"></span></div>
+                <div class="field-item"><span class="field-label">Total Calendar Days</span><span class="field-value" id="f-total-days"></span></div>
+              </div>
+              <hr class="section-sep">
+              <div class="field-grid">
+                <div class="field-item"><span class="field-label">KYB Submission Date</span><span class="field-value" id="f-kyb-date"></span></div>
+                <div class="field-item"><span class="field-label">Compliance Start Date</span><span class="field-value" id="f-comp-date"></span></div>
+                <div class="field-item"><span class="field-label">Decision Date</span><span class="field-value" id="f-decision-date"></span></div>
+              </div>
+            </div>
+
+            <!-- Assignment -->
+            <div class="panel">
+              <div class="panel-title">Assignment</div>
+              <div class="field-grid">
+                <div class="field-item">
+                  <span class="field-label">KYB Reviewer</span>
+                  <span class="field-value" id="f-kyb-reviewer"></span>
+                </div>
+                <div class="field-item">
+                  <span class="field-label">Compliance Reviewer</span>
+                  <span class="field-value" id="f-comp-reviewer"></span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Waiting Customer -->
+            <div class="panel" id="panel-waiting" style="display:none">
+              <div class="panel-title">Waiting Customer</div>
+              <div class="field-grid">
+                <div class="field-item"><span class="field-label">Triggered By</span><span class="field-value" id="f-triggered"></span></div>
+                <div class="field-item"><span class="field-label">Waiting Round</span><span class="field-value" id="f-waiting-round"></span></div>
+                <div class="field-item"><span class="field-label">Customer Responded</span><span class="field-value" id="f-responded"></span></div>
+                <div class="field-item"><span class="field-label">Response Date</span><span class="field-value" id="f-response-date"></span></div>
+                <div class="field-item full-width">
+                  <span class="field-label">Blockers</span>
+                  <div class="blocker-list" id="f-blockers"></div>
+                </div>
+                <div class="field-item full-width">
+                  <span class="field-label">Blocker Notes</span>
+                  <span class="field-value" id="f-blocker-notes"></span>
+                </div>
+              </div>
+            </div>
+
+            <!-- RM Follow-up -->
+            <div class="panel">
+              <div class="panel-title">RM Follow-up</div>
+              <div class="field-grid">
+                <div class="field-item"><span class="field-label">Last Customer Contact</span><span class="field-value" id="f-last-contact"></span></div>
+                <div class="field-item">
+                  <span class="field-label">Contact Attempts</span>
+                  <div style="display:flex;align-items:center;gap:8px">
+                    <span class="field-value contact-counter"><span class="count" id="f-contact-attempts">0</span></span>
+                    <button class="btn btn-default btn-sm" onclick="logContactAttempt()">+1 Log Contact</button>
+                  </div>
+                </div>
+                <div class="field-item"><span class="field-label">Next Follow-up Date</span><span class="field-value" id="f-next-followup"></span></div>
+              </div>
+            </div>
+
+            <!-- Notes -->
+            <div class="panel">
+              <div class="panel-title">Case Notes</div>
+              <div id="f-notes" style="font-size:13px;color:#595959;line-height:1.6"></div>
+              <button class="btn btn-ghost btn-sm" style="margin-top:10px" onclick="openDrawer('edit-notes-drawer')">✏ Edit Notes</button>
+            </div>
+
+          </div>
+
+          <!-- Right: inline activity log summary -->
+          <div class="detail-sidebar">
+            <div class="panel" style="max-height:600px;overflow-y:auto">
+              <div class="panel-title" style="display:flex;justify-content:space-between;align-items:center">
+                Activity Log
+                <button class="btn btn-ghost btn-sm" onclick="openDrawer('activity-drawer')">Full Log →</button>
+              </div>
+              <div class="activity-timeline" id="inline-log"></div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- #case-content -->
+    </div>
+  </div>
+
+</div>
+
+<!-- ── Drawer backdrop ── -->
+<div class="drawer-backdrop" id="drawer-backdrop" onclick="closeAllDrawers()"></div>
+
+<!-- ── Activity Log Drawer ── -->
+<div class="drawer" id="activity-drawer">
+  <div class="drawer-header">
+    <span class="drawer-title">📋 Activity Log</span>
+    <button class="drawer-close" onclick="closeDrawer('activity-drawer')" aria-label="Close">✕</button>
+  </div>
+  <div class="drawer-body">
+    <!-- Add entry form -->
+    <div class="log-add-form">
+      <div style="font-size:12px;font-weight:600;color:#595959;margin-bottom:8px">Add Log Entry</div>
+      <select id="log-type-select">
+        <option>Reviewer Note</option>
+        <option>Document Request Sent</option>
+        <option>Customer Contacted</option>
+        <option>Customer Responded</option>
+        <option>Blocker Raised</option>
+        <option>Blocker Cleared</option>
+        <option>Escalation Flagged</option>
+      </select>
+      <textarea id="log-desc-input" placeholder="Describe the action or observation…"></textarea>
+      <button class="btn btn-primary btn-sm" onclick="addLogEntry()">Add Entry</button>
+    </div>
+    <div class="activity-timeline" id="full-log"></div>
+  </div>
+</div>
+
+<!-- ── Edit Notes Drawer ── -->
+<div class="drawer drawer-sm" id="edit-notes-drawer">
+  <div class="drawer-header">
+    <span class="drawer-title">Edit Case Notes</span>
+    <button class="drawer-close" onclick="closeDrawer('edit-notes-drawer')" aria-label="Close">✕</button>
+  </div>
+  <div class="drawer-body">
+    <div class="form-group">
+      <label class="form-label">Case Notes</label>
+      <textarea class="form-textarea" id="notes-textarea" style="min-height:200px"></textarea>
+    </div>
+    <div class="form-group" style="margin-top:12px">
+      <label class="form-label">Priority Flag</label>
+      <label class="form-checkbox">
+        <input type="checkbox" id="priority-checkbox" />
+        Mark as Priority
+      </label>
+    </div>
+  </div>
+  <div class="drawer-footer">
+    <button class="btn btn-default" onclick="closeDrawer('edit-notes-drawer')">Cancel</button>
+    <button class="btn btn-primary" onclick="saveNotes()">Save</button>
+  </div>
+</div>
+
+<!-- ── State Change Modal ── -->
+<div class="modal-backdrop" id="state-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Change Case State</div>
+    </div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">New State</label>
+          <input class="form-input" id="modal-new-state" readonly />
+        </div>
+        <div class="form-group">
+          <label class="form-label">State Entry Date *</label>
+          <input class="form-input" type="date" id="modal-state-date" />
+        </div>
+      </div>
+      <div id="blocker-required-section" style="display:none">
+        <div class="form-group" style="margin-bottom:10px">
+          <label class="form-label">Triggered By * <span style="color:#ff4d4f">(required for Waiting Customer)</span></label>
+          <select class="form-select" id="modal-triggered-by">
+            <option value="">Select…</option>
+            <option>KYB</option>
+            <option>Compliance</option>
+          </select>
+        </div>
+        <div class="form-group" style="margin-bottom:10px">
+          <label class="form-label">Blocker Category * <span style="color:#ff4d4f">(at least one required)</span></label>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:4px" id="modal-blocker-checks">
+            <label style="font-size:12px"><input type="checkbox" value="A"> A: Document quality</label>
+            <label style="font-size:12px"><input type="checkbox" value="B"> B: Completeness</label>
+            <label style="font-size:12px"><input type="checkbox" value="C"> C: Translation</label>
+            <label style="font-size:12px"><input type="checkbox" value="D"> D: UBO</label>
+            <label style="font-size:12px"><input type="checkbox" value="E"> E: Source of funds</label>
+            <label style="font-size:12px"><input type="checkbox" value="F"> F: Business legitimacy</label>
+            <label style="font-size:12px"><input type="checkbox" value="G"> G: Adverse findings</label>
+            <label style="font-size:12px"><input type="checkbox" value="H"> H: Internal issue</label>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Blocker Notes</label>
+          <textarea class="form-textarea" id="modal-blocker-notes" placeholder="Describe the specific document issue or blocker…" style="min-height:60px"></textarea>
+        </div>
+      </div>
+      <div id="decision-date-section" style="display:none">
+        <div class="form-group">
+          <label class="form-label">Decision Date * <span style="color:#ff4d4f">(required for terminal states)</span></label>
+          <input class="form-input" type="date" id="modal-decision-date" />
+        </div>
+      </div>
+      <div class="form-group" style="margin-top:10px">
+        <label class="form-label">Note (auto-logged)</label>
+        <textarea class="form-textarea" id="modal-note" placeholder="Optional context for this state change…" style="min-height:50px"></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-default" onclick="closeModal('state-modal');document.getElementById('state-select').value=''">Cancel</button>
+      <button class="btn btn-primary" onclick="confirmStateChange()">Confirm State Change</button>
+    </div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+<script>
+  let currentCase = null;
+
+  function getQueryParam(name) {
+    return new URLSearchParams(window.location.search).get(name);
+  }
+
+  function formatDate(d) { return d || '<span class="field-value muted">—</span>'; }
+
+  function renderLogEntry(entry) {
+    const colorMap = { blue: 'blue', green: 'green', orange: 'orange', red: 'red', gray: 'gray', purple: 'blue' };
+    const dotColor = colorMap[entry.color] || 'gray';
+    return `
+      <div class="activity-entry">
+        <div class="activity-dot-col">
+          <div class="activity-dot ${dotColor}"></div>
+          <div class="activity-line"></div>
+        </div>
+        <div class="activity-content">
+          <div class="activity-meta">
+            <span class="tag tag-${dotColor === 'blue' ? 'blue' : dotColor === 'green' ? 'green' : dotColor === 'orange' ? 'orange' : dotColor === 'red' ? 'red' : 'gray'}" style="font-size:10px">${entry.type}</span>
+            <span class="activity-actor">${entry.actor}</span>
+            <span class="activity-ts">${entry.ts}</span>
+          </div>
+          <div class="activity-desc">${entry.desc}</div>
+        </div>
+      </div>`;
+  }
+
+  function renderCase(c) {
+    currentCase = c;
+    document.getElementById('breadcrumb-id').textContent = c.id;
+    document.getElementById('page-title').textContent = c.companyName;
+
+    // Hero
+    document.getElementById('hero-id').textContent = c.id;
+    document.getElementById('hero-priority').innerHTML = c.priorityFlag ? '<span class="priority-flag" title="Priority case">⚑ Priority</span>' : '';
+    document.getElementById('hero-state').innerHTML = `<span class="${stateTagClass(c.currentState)}">${c.currentState}</span>`;
+    document.getElementById('hero-aging').innerHTML = agingHtml(c.stateEntryDate);
+    document.getElementById('hero-company').textContent = c.companyName;
+    document.getElementById('hero-customer').textContent = 'Customer: ' + c.customerName + '  ·  RM: ' + c.rmOwner;
+
+    // State select
+    const sel = document.getElementById('state-select');
+    sel.innerHTML = '<option value="">Change state…</option>';
+    const allStates = ['Registration Pending','KYB Submitted','KYB Review','Waiting Customer','Compliance Review','EDD','Approved','Rejected','Abandoned'];
+    allStates.filter(s => s !== c.currentState).forEach(s => {
+      const opt = document.createElement('option');
+      opt.value = s; opt.textContent = s;
+      sel.appendChild(opt);
+    });
+
+    // Identification
+    document.getElementById('f-id').textContent = c.id;
+    document.getElementById('f-reg-date').textContent = c.registrationDate;
+    document.getElementById('f-customer').textContent = c.customerName;
+    document.getElementById('f-company').textContent = c.companyName;
+    document.getElementById('f-rm').textContent = c.rmOwner;
+    document.getElementById('f-priority').innerHTML = c.priorityFlag ? '<span class="priority-flag">⚑ Yes</span>' : 'No';
+
+    // Lifecycle
+    document.getElementById('f-state').innerHTML = `<span class="${stateTagClass(c.currentState)}">${c.currentState}</span>`;
+    document.getElementById('f-prev-state').innerHTML = c.previousState ? `<span class="tag tag-gray">${c.previousState}</span>` : '<span class="field-value muted">—</span>';
+    document.getElementById('f-state-entry').textContent = c.stateEntryDate;
+    const days = getDaysInState(c.stateEntryDate);
+    document.getElementById('f-days').textContent = days + ' day' + (days !== 1 ? 's' : '');
+    document.getElementById('f-aging').innerHTML = agingHtml(c.stateEntryDate);
+    const reg = new Date(c.registrationDate);
+    const end = c.decisionDate ? new Date(c.decisionDate) : new Date(TODAY);
+    const totalDays = Math.floor((end - reg) / 86400000);
+    document.getElementById('f-total-days').textContent = totalDays + ' day' + (totalDays !== 1 ? 's' : '') + (c.decisionDate ? '' : ' (ongoing)');
+    document.getElementById('f-kyb-date').innerHTML = formatDate(c.kybSubmissionDate);
+    document.getElementById('f-comp-date').innerHTML = formatDate(c.complianceStartDate);
+    document.getElementById('f-decision-date').innerHTML = formatDate(c.decisionDate);
+
+    // Assignment
+    document.getElementById('f-kyb-reviewer').innerHTML = c.kybReviewer || '<span class="field-value muted">Unassigned</span>';
+    document.getElementById('f-comp-reviewer').innerHTML = c.complianceReviewer || '<span class="field-value muted">Unassigned</span>';
+
+    // Waiting Customer panel
+    if (c.currentState === 'Waiting Customer') {
+      document.getElementById('panel-waiting').style.display = '';
+      document.getElementById('f-triggered').innerHTML = c.triggeredBy ? `<span class="tag tag-blue">${c.triggeredBy}</span>` : '—';
+      document.getElementById('f-waiting-round').textContent = c.waitingRound;
+      document.getElementById('f-responded').innerHTML = c.customerResponded ? '<span class="tag tag-green">✓ Yes</span>' : '<span class="tag tag-orange">Awaiting</span>';
+      document.getElementById('f-response-date').innerHTML = formatDate(c.responseDate);
+      document.getElementById('f-blockers').innerHTML = c.blockerCategories.length
+        ? c.blockerCategories.map(code => `<span class="blocker-tag">${code}: ${BLOCKER_CODES[code]}</span>`).join('')
+        : '<span class="field-value muted">—</span>';
+      document.getElementById('f-blocker-notes').textContent = c.blockerNotes || '—';
+    }
+
+    // Customer responded action
+    const checkbox = document.getElementById('responded-checkbox');
+    checkbox.checked = c.customerResponded;
+
+    // RM Follow-up
+    document.getElementById('f-last-contact').innerHTML = formatDate(c.lastCustomerContact);
+    document.getElementById('f-contact-attempts').textContent = c.contactAttempts;
+    document.getElementById('f-next-followup').innerHTML = c.nextFollowupDate
+      ? (c.nextFollowupDate <= TODAY ? `<span style="color:#ff4d4f;font-weight:600">${c.nextFollowupDate} (overdue)</span>` : c.nextFollowupDate)
+      : '<span class="field-value muted">—</span>';
+
+    // Notes
+    document.getElementById('f-notes').textContent = c.caseNotes || '—';
+    document.getElementById('notes-textarea').value = c.caseNotes || '';
+    document.getElementById('priority-checkbox').checked = c.priorityFlag;
+
+    // Activity logs
+    const logHtml = [...c.activityLog].reverse().map(renderLogEntry).join('');
+    document.getElementById('full-log').innerHTML = logHtml;
+    const inlineEntries = [...c.activityLog].reverse().slice(0, 5);
+    document.getElementById('inline-log').innerHTML = inlineEntries.map(renderLogEntry).join('') +
+      (c.activityLog.length > 5 ? `<div style="text-align:center;margin-top:10px"><button class="btn btn-ghost btn-sm" onclick="openDrawer('activity-drawer')">View all ${c.activityLog.length} entries →</button></div>` : '');
+  }
+
+  function handleStateChange(newState) {
+    if (!newState) return;
+    document.getElementById('modal-new-state').value = newState;
+    document.getElementById('modal-state-date').value = TODAY;
+    document.getElementById('modal-decision-date').value = TODAY;
+
+    const isWaiting = newState === 'Waiting Customer';
+    const isTerminal = TERMINAL_STATES.includes(newState);
+    document.getElementById('blocker-required-section').style.display = isWaiting ? '' : 'none';
+    document.getElementById('decision-date-section').style.display = isTerminal ? '' : 'none';
+    document.getElementById('modal-note').value = '';
+    openModal('state-modal');
+  }
+
+  function confirmStateChange() {
+    const newState = document.getElementById('modal-new-state').value;
+    const isWaiting = newState === 'Waiting Customer';
+
+    if (isWaiting) {
+      const triggeredBy = document.getElementById('modal-triggered-by').value;
+      const checkedBlockers = [...document.querySelectorAll('#modal-blocker-checks input:checked')];
+      if (!triggeredBy) { alert('Triggered By is required before entering Waiting Customer.'); return; }
+      if (checkedBlockers.length === 0) { alert('At least one Blocker Category is required before entering Waiting Customer.'); return; }
+
+      const blockerCodes = checkedBlockers.map(b => b.value);
+      currentCase.blockerCategories = blockerCodes;
+      currentCase.triggeredBy = triggeredBy;
+      currentCase.blockerNotes = document.getElementById('modal-blocker-notes').value;
+      currentCase.waitingRound = (currentCase.waitingRound || 0) + 1;
+    }
+
+    if (TERMINAL_STATES.includes(newState)) {
+      currentCase.decisionDate = document.getElementById('modal-decision-date').value;
+    }
+
+    const oldState = currentCase.currentState;
+    currentCase.previousState = oldState;
+    currentCase.currentState = newState;
+    currentCase.stateEntryDate = document.getElementById('modal-state-date').value;
+    currentCase.customerResponded = false;
+
+    const noteText = document.getElementById('modal-note').value;
+    const logDesc = `State changed: ${oldState} → ${newState}${isWaiting ? ` (Round ${currentCase.waitingRound}) — Blockers: ${currentCase.blockerCategories.join(', ')}` : ''}` + (noteText ? `. Note: ${noteText}` : '');
+    const colorMap = { 'KYB Review': 'blue', 'Waiting Customer': 'orange', 'Compliance Review': 'purple', 'EDD': 'red', 'Approved': 'green', 'Rejected': 'red', 'KYB Submitted': 'blue' };
+    currentCase.activityLog.push({
+      ts: TODAY + ' (just now)', type: 'State Changed',
+      color: colorMap[newState] || 'gray',
+      desc: logDesc,
+      actor: roleLabel(),
+    });
+
+    closeModal('state-modal');
+    document.getElementById('state-select').value = '';
+    renderCase(currentCase);
+  }
+
+  function logContactAttempt() {
+    const nextDate = prompt('Set Next Follow-up Date (YYYY-MM-DD):', daysAgo(-3));
+    currentCase.contactAttempts = (currentCase.contactAttempts || 0) + 1;
+    currentCase.lastCustomerContact = TODAY;
+    if (nextDate) currentCase.nextFollowupDate = nextDate;
+    currentCase.activityLog.push({
+      ts: TODAY + ' (just now)', type: 'Customer Contacted', color: 'gray',
+      desc: `Customer contact attempt ${currentCase.contactAttempts}.`,
+      actor: roleLabel(),
+    });
+    renderCase(currentCase);
+  }
+
+  function handleCustomerResponded(checked) {
+    currentCase.customerResponded = checked;
+    if (checked) {
+      currentCase.responseDate = TODAY;
+      currentCase.activityLog.push({
+        ts: TODAY + ' (just now)', type: 'Customer Responded', color: 'green',
+        desc: 'Customer Responded — awaiting reviewer pickup. Case now appears in Returned from Customer queue.',
+        actor: roleLabel(),
+      });
+    }
+    renderCase(currentCase);
+  }
+
+  function addLogEntry() {
+    const type = document.getElementById('log-type-select').value;
+    const desc = document.getElementById('log-desc-input').value.trim();
+    if (!desc) { alert('Please enter a description.'); return; }
+    const colorMap = { 'Reviewer Note': 'gray', 'Document Request Sent': 'orange', 'Customer Contacted': 'gray', 'Customer Responded': 'green', 'Blocker Raised': 'orange', 'Blocker Cleared': 'green', 'Escalation Flagged': 'red' };
+    currentCase.activityLog.push({
+      ts: TODAY + ' (just now)', type, color: colorMap[type] || 'gray',
+      desc, actor: roleLabel(),
+    });
+    document.getElementById('log-desc-input').value = '';
+    renderCase(currentCase);
+    openDrawer('activity-drawer');
+  }
+
+  function saveNotes() {
+    currentCase.caseNotes = document.getElementById('notes-textarea').value;
+    currentCase.priorityFlag = document.getElementById('priority-checkbox').checked;
+    currentCase.activityLog.push({
+      ts: TODAY + ' (just now)', type: 'Reviewer Note', color: 'gray',
+      desc: 'Case notes updated.',
+      actor: roleLabel(),
+    });
+    closeDrawer('edit-notes-drawer');
+    renderCase(currentCase);
+  }
+
+  function closeAllDrawers() {
+    document.querySelectorAll('.drawer.open').forEach(d => d.classList.remove('open'));
+    document.getElementById('drawer-backdrop').classList.remove('open');
+  }
+
+  function switchRole(role) {
+    currentRole = role;
+    document.getElementById('role-badge').textContent = roleLabel();
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const id = getQueryParam('id');
+    const c = getCase(id);
+    if (!c) {
+      document.getElementById('case-content').style.display = 'none';
+      document.getElementById('case-not-found').style.display = '';
+    } else {
+      renderCase(c);
+    }
+  });
+</script>
+</body>
+</html>

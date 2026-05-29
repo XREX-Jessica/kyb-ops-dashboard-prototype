@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KYB Operations Dashboard — XREX Pay</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<div class="app-layout">
+
+  <!-- ── Sidebar ── -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-label">XREX Pay</div>
+      <div class="logo-sub">Internal Operations CMS</div>
+    </div>
+
+    <div class="role-switcher">
+      <label>Demo role:</label>
+      <select id="role-select">
+        <option value="ops">Ops PM (Full Access)</option>
+        <option value="kyb">KYB Reviewer</option>
+        <option value="compliance">Compliance</option>
+        <option value="rm_sarah">RM — Sarah Lin</option>
+        <option value="rm_mike">RM — Mike Tan</option>
+        <option value="rm_tom">RM — Tom Chang</option>
+      </select>
+    </div>
+
+    <div class="nav-group-label">KYB Onboarding</div>
+    <div class="nav-item active" data-view="all">
+      <span class="nav-icon">☰</span> All Cases
+    </div>
+    <div class="nav-item" data-view="my_pipeline">
+      <span class="nav-icon">👤</span> My Pipeline (RM)
+    </div>
+    <div class="nav-item" data-view="waiting_customer">
+      <span class="nav-icon">⏳</span> Waiting Customer
+      <span class="nav-badge orange" id="badge-waiting"></span>
+    </div>
+    <div class="nav-item" data-view="returned">
+      <span class="nav-icon">⚡</span> Returned from Customer
+      <span class="nav-badge" id="badge-returned"></span>
+    </div>
+
+    <div class="nav-group-label">Review Queues</div>
+    <div class="nav-item" data-view="kyb_queue">
+      <span class="nav-icon">🔍</span> KYB Review Queue
+    </div>
+    <div class="nav-item" data-view="compliance_queue">
+      <span class="nav-icon">🛡</span> Compliance Queue
+    </div>
+
+    <div class="nav-group-label">Operations</div>
+    <div class="nav-item" data-view="aging_queue">
+      <span class="nav-icon">🔴</span> Aging / Overdue
+      <span class="nav-badge" id="badge-overdue"></span>
+    </div>
+    <div class="nav-item" data-view="mgmt">
+      <span class="nav-icon">📊</span> Management Overview
+    </div>
+  </aside>
+
+  <!-- ── Main content ── -->
+  <div class="main-content">
+    <div class="page-header">
+      <div class="header-left">
+        <div class="breadcrumb">XREX Pay &rsaquo; <span>KYB Onboarding</span></div>
+        <h1 class="page-title" id="page-title">All Cases</h1>
+      </div>
+      <div class="header-right">
+        <span style="font-size:12px;color:#8c8c8c;">Viewing as: <strong id="role-badge">Ops PM (Full Access)</strong></span>
+        <button class="btn btn-primary btn-sm" onclick="openModal('create-modal')">+ New Case</button>
+      </div>
+    </div>
+
+    <div class="content-area">
+
+      <!-- Returned-from-customer alert (shown only on returned view) -->
+      <div class="alert-banner" id="returned-alert" style="display:none">
+        ⚡ Cases in this queue must be picked up within 4 business hours. Reviewer: open the case and change state to KYB Review or Compliance Review.
+      </div>
+
+      <!-- Stats bar (shown only in Management Overview) -->
+      <div class="stats-bar" id="stats-bar" style="display:none"></div>
+
+      <!-- Filter bar -->
+      <div class="filter-bar">
+        <label>Search:</label>
+        <input id="search-input" type="text" placeholder="Company name, Case ID, customer…" />
+        <label>State:</label>
+        <select id="state-filter">
+          <option value="">All states</option>
+          <option>Registration Pending</option>
+          <option>KYB Submitted</option>
+          <option>KYB Review</option>
+          <option>Waiting Customer</option>
+          <option>Compliance Review</option>
+          <option>EDD</option>
+          <option>Approved</option>
+          <option>Rejected</option>
+          <option>Abandoned</option>
+        </select>
+        <div class="filter-spacer"></div>
+        <span class="filter-count" id="result-count"></span>
+      </div>
+
+      <!-- Table -->
+      <div class="table-card">
+        <div class="table-wrap">
+          <table>
+            <thead id="table-head"></thead>
+            <tbody id="table-body"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<!-- ── Drawer backdrop ── -->
+<div class="drawer-backdrop" id="drawer-backdrop" onclick="document.querySelectorAll('.drawer.open').forEach(d=>d.classList.remove('open'));this.classList.remove('open')"></div>
+
+<!-- ── Create Case Modal ── -->
+<div class="modal-backdrop" id="create-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Create New KYB Case</div>
+    </div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Customer Name *</label>
+          <input class="form-input" type="text" placeholder="Full legal name" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Company Name *</label>
+          <input class="form-input" type="text" placeholder="Registered company name" />
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">RM Owner *</label>
+          <select class="form-select">
+            <option>Sarah Lin</option>
+            <option>Mike Tan</option>
+            <option>Tom Chang</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Registration Date *</label>
+          <input class="form-input" type="date" value="2026-05-29" />
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group full">
+          <label class="form-label">Case Notes</label>
+          <textarea class="form-textarea" placeholder="Initial context, source of lead, any known flags…"></textarea>
+        </div>
+      </div>
+      <p style="font-size:12px;color:#8c8c8c;margin-top:4px">Initial state: <strong>Registration Pending</strong>. Case ID will be auto-assigned.</p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-default" onclick="closeModal('create-modal')">Cancel</button>
+      <button class="btn btn-primary" onclick="alert('Demo: Case would be created with next sequential ID (KYB-011). State: Registration Pending.');closeModal('create-modal')">Create Case</button>
+    </div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', initIndex);
+</script>
+</body>
+</html>
