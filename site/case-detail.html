@@ -44,12 +44,10 @@
     <div class="role-switcher">
       <label>Demo role:</label>
       <select id="role-select" onchange="switchRole(this.value)">
-        <option value="ops">Ops PM (Full Access)</option>
-        <option value="kyb">KYB Reviewer</option>
-        <option value="compliance">Compliance</option>
-        <option value="rm_sarah">RM — Sarah Lin</option>
-        <option value="rm_mike">RM — Mike Tan</option>
-        <option value="rm_tom">RM — Tom Chang</option>
+        <option value="ops">Ops PM (Winston)</option>
+        <option value="kyb">KYB (Arianna)</option>
+        <option value="compliance">Compliance (XinTing)</option>
+        <option value="rm_selina">RM — Selina Chang</option>
       </select>
     </div>
     <div class="nav-group-label">KYB Onboarding</div>
@@ -157,17 +155,23 @@
               </div>
             </div>
 
-            <!-- Assignment -->
+            <!-- Review Assignment (Maker / Checker) -->
             <div class="panel">
-              <div class="panel-title">Assignment</div>
-              <div class="field-grid">
-                <div class="field-item">
-                  <span class="field-label">KYB Reviewer</span>
-                  <span class="field-value" id="f-kyb-reviewer"></span>
+              <div class="panel-title">Review Assignment</div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:0 24px">
+                <div>
+                  <div style="font-size:10px;font-weight:700;color:#8c8c8c;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;padding-bottom:5px;border-bottom:1px solid #f0f0f0">KYB Review</div>
+                  <div class="field-grid" style="gap:8px 16px">
+                    <div class="field-item"><span class="field-label">Maker</span><span class="field-value" id="f-kyb-maker"></span></div>
+                    <div class="field-item"><span class="field-label">Checker</span><span class="field-value" id="f-kyb-checker"></span></div>
+                  </div>
                 </div>
-                <div class="field-item">
-                  <span class="field-label">Compliance Reviewer</span>
-                  <span class="field-value" id="f-comp-reviewer"></span>
+                <div>
+                  <div style="font-size:10px;font-weight:700;color:#8c8c8c;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;padding-bottom:5px;border-bottom:1px solid #f0f0f0">Compliance Review</div>
+                  <div class="field-grid" style="gap:8px 16px">
+                    <div class="field-item"><span class="field-label">Maker</span><span class="field-value" id="f-comp-maker"></span></div>
+                    <div class="field-item"><span class="field-label">Checker</span><span class="field-value" id="f-comp-checker"></span></div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -334,8 +338,22 @@
       </div>
       <div id="decision-date-section" style="display:none">
         <div class="form-group">
-          <label class="form-label">Decision Date * <span style="color:#ff4d4f">(required for terminal states)</span></label>
+          <label class="form-label">Decision Date * <span style="color:#ff4d4f">(required)</span></label>
           <input class="form-input" type="date" id="modal-decision-date" />
+        </div>
+      </div>
+      <div id="abandoned-reason-section" style="display:none">
+        <div class="form-group">
+          <label class="form-label">Abandoned Reason * <span style="color:#ff4d4f">(required)</span></label>
+          <select class="form-select" id="modal-abandoned-reason">
+            <option value="">Select reason…</option>
+            <option>No Response</option>
+            <option>Customer Not Interested</option>
+            <option>Unable To Provide Documents</option>
+            <option>Business Not Eligible</option>
+            <option>Chose Other Provider</option>
+            <option>Unknown</option>
+          </select>
         </div>
       </div>
       <div class="form-group" style="margin-top:10px">
@@ -396,7 +414,7 @@
     // State select
     const sel = document.getElementById('state-select');
     sel.innerHTML = '<option value="">Change state…</option>';
-    const allStates = ['Registration Pending','KYB Submitted','KYB Review','Waiting Customer','Compliance Review','EDD','Approved','Rejected','Abandoned'];
+    const allStates = ['KYB Form Pending','KYB Submitted','KYB Review','Waiting Customer','Compliance Review','EDD','Approved','Rejected','Abandoned'];
     allStates.filter(s => s !== c.currentState).forEach(s => {
       const opt = document.createElement('option');
       opt.value = s; opt.textContent = s;
@@ -426,9 +444,12 @@
     document.getElementById('f-comp-date').innerHTML = formatDate(c.complianceStartDate);
     document.getElementById('f-decision-date').innerHTML = formatDate(c.decisionDate);
 
-    // Assignment
-    document.getElementById('f-kyb-reviewer').innerHTML = c.kybReviewer || '<span class="field-value muted">Unassigned</span>';
-    document.getElementById('f-comp-reviewer').innerHTML = c.complianceReviewer || '<span class="field-value muted">Unassigned</span>';
+    // Review Assignment (Maker / Checker)
+    const muted = '<span class="field-value muted">—</span>';
+    document.getElementById('f-kyb-maker').innerHTML    = c.kybReviewer        ? `<span class="owner-chip owner-kyb">${c.kybReviewer}</span>`        : muted;
+    document.getElementById('f-kyb-checker').innerHTML  = c.kybChecker         ? `<span class="owner-chip owner-kyb">${c.kybChecker}</span>`          : muted;
+    document.getElementById('f-comp-maker').innerHTML   = c.complianceReviewer ? `<span class="owner-chip owner-compliance">${c.complianceReviewer}</span>` : muted;
+    document.getElementById('f-comp-checker').innerHTML = c.complianceChecker  ? `<span class="owner-chip owner-compliance">${c.complianceChecker}</span>`  : muted;
 
     // Waiting Customer panel
     if (c.currentState === 'Waiting Customer') {
@@ -472,50 +493,61 @@
     document.getElementById('modal-new-state').value = newState;
     document.getElementById('modal-state-date').value = TODAY;
     document.getElementById('modal-decision-date').value = TODAY;
+    document.getElementById('modal-abandoned-reason').value = '';
 
-    const isWaiting = newState === 'Waiting Customer';
-    const isTerminal = TERMINAL_STATES.includes(newState);
-    document.getElementById('blocker-required-section').style.display = isWaiting ? '' : 'none';
-    document.getElementById('decision-date-section').style.display = isTerminal ? '' : 'none';
+    const isWaiting   = newState === 'Waiting Customer';
+    const isAbandoned = newState === 'Abandoned';
+    const isDecision  = ['Approved', 'Rejected'].includes(newState);
+    document.getElementById('blocker-required-section').style.display = isWaiting   ? '' : 'none';
+    document.getElementById('decision-date-section').style.display    = isDecision  ? '' : 'none';
+    document.getElementById('abandoned-reason-section').style.display = isAbandoned ? '' : 'none';
     document.getElementById('modal-note').value = '';
     openModal('state-modal');
   }
 
   function confirmStateChange() {
-    const newState = document.getElementById('modal-new-state').value;
-    const isWaiting = newState === 'Waiting Customer';
+    const newState    = document.getElementById('modal-new-state').value;
+    const isWaiting   = newState === 'Waiting Customer';
+    const isAbandoned = newState === 'Abandoned';
 
     if (isWaiting) {
-      const triggeredBy = document.getElementById('modal-triggered-by').value;
+      const triggeredBy     = document.getElementById('modal-triggered-by').value;
       const checkedBlockers = [...document.querySelectorAll('#modal-blocker-checks input:checked')];
       if (!triggeredBy) { alert('Triggered By is required before entering Waiting Customer.'); return; }
       if (checkedBlockers.length === 0) { alert('At least one Blocker Category is required before entering Waiting Customer.'); return; }
-
-      const blockerCodes = checkedBlockers.map(b => b.value);
-      currentCase.blockerCategories = blockerCodes;
-      currentCase.triggeredBy = triggeredBy;
-      currentCase.blockerNotes = document.getElementById('modal-blocker-notes').value;
-      currentCase.waitingRound = (currentCase.waitingRound || 0) + 1;
+      currentCase.blockerCategories = checkedBlockers.map(b => b.value);
+      currentCase.triggeredBy       = triggeredBy;
+      currentCase.blockerNotes      = document.getElementById('modal-blocker-notes').value;
+      currentCase.waitingRound      = (currentCase.waitingRound || 0) + 1;
     }
 
-    if (TERMINAL_STATES.includes(newState)) {
+    if (isAbandoned) {
+      const reason = document.getElementById('modal-abandoned-reason').value;
+      if (!reason) { alert('Abandoned Reason is required.'); return; }
+      currentCase.abandonedReason = reason;
+    }
+
+    if (['Approved', 'Rejected'].includes(newState)) {
       currentCase.decisionDate = document.getElementById('modal-decision-date').value;
     }
 
     const oldState = currentCase.currentState;
-    currentCase.previousState = oldState;
-    currentCase.currentState = newState;
-    currentCase.stateEntryDate = document.getElementById('modal-state-date').value;
+    currentCase.previousState    = oldState;
+    currentCase.currentState     = newState;
+    currentCase.stateEntryDate   = document.getElementById('modal-state-date').value;
     currentCase.customerResponded = false;
 
     const noteText = document.getElementById('modal-note').value;
-    const logDesc = `State changed: ${oldState} → ${newState}${isWaiting ? ` (Round ${currentCase.waitingRound}) — Blockers: ${currentCase.blockerCategories.join(', ')}` : ''}` + (noteText ? `. Note: ${noteText}` : '');
-    const colorMap = { 'KYB Review': 'blue', 'Waiting Customer': 'orange', 'Compliance Review': 'purple', 'EDD': 'red', 'Approved': 'green', 'Rejected': 'red', 'KYB Submitted': 'blue' };
+    let logDesc = `State changed: ${oldState} → ${newState}`;
+    if (isWaiting)   logDesc += ` (Round ${currentCase.waitingRound}) — Blockers: ${currentCase.blockerCategories.join(', ')}`;
+    if (isAbandoned) logDesc += ` — Reason: ${currentCase.abandonedReason}`;
+    if (noteText)    logDesc += `. Note: ${noteText}`;
+
+    const colorMap = { 'KYB Review': 'blue', 'Waiting Customer': 'orange', 'Compliance Review': 'purple', 'EDD': 'red', 'Approved': 'green', 'Rejected': 'red', 'KYB Submitted': 'blue', 'Abandoned': 'gray' };
     currentCase.activityLog.push({
       ts: TODAY + ' (just now)', type: 'State Changed',
       color: colorMap[newState] || 'gray',
-      desc: logDesc,
-      actor: roleLabel(),
+      desc: logDesc, actor: roleLabel(),
     });
 
     closeModal('state-modal');

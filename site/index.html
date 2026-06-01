@@ -90,7 +90,7 @@
         <label>State:</label>
         <select id="state-filter">
           <option value="">All states</option>
-          <option>Registration Pending</option>
+          <option>KYB Form Pending</option>
           <option>KYB Submitted</option>
           <option>KYB Review</option>
           <option>Waiting Customer</option>
@@ -132,86 +132,86 @@
             <table class="ref-table">
               <thead>
                 <tr>
-                  <th style="width:160px">State</th>
-                  <th style="width:22%">Definition</th>
-                  <th style="width:20%">Entry Criteria</th>
-                  <th style="width:20%">Exit Criteria</th>
-                  <th style="width:130px">Owner</th>
-                  <th>Key Rule</th>
+                  <th style="width:155px">State</th>
+                  <th style="width:24%">Definition</th>
+                  <th style="width:19%">Entry Criteria</th>
+                  <th style="width:19%">Exit Criteria</th>
+                  <th style="width:150px">Current Assignee</th>
+                  <th style="width:75px">State Type</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td><span class="tag tag-gray">Registration Pending</span></td>
-                  <td>Customer has completed product registration. KYB documents not yet submitted.</td>
+                  <td><span class="tag tag-gray">KYB Form Pending</span></td>
+                  <td>Customer has completed platform registration but has not submitted the KYB form.</td>
                   <td>RM creates case at point of customer registration.</td>
-                  <td>RM confirms document submission and manually advances to KYB Submitted.</td>
+                  <td>Customer submits KYB form → RM advances to KYB Submitted.</td>
                   <td><span class="owner-chip owner-rm">Selina Chang</span></td>
-                  <td><span class="ref-note">Follow up within 3 business days if no submission received.</span></td>
+                  <td><span class="tag tag-blue" style="font-size:10px">Active</span></td>
                 </tr>
                 <tr>
                   <td><span class="tag tag-blue">KYB Submitted</span></td>
-                  <td>Customer has submitted KYB documents. Case is queued for reviewer assignment and pickup.</td>
-                  <td>RM advances from Registration Pending after confirming the document package is received and visually complete. Do not advance if the package is obviously incomplete.</td>
-                  <td>Arianna picks up the case → KYB Review.</td>
-                  <td><span class="owner-chip owner-kyb">Arianna</span></td>
-                  <td><span class="ref-alert">Must be picked up within 1 business day. If unassigned >1 day, Ops PM escalates.</span></td>
+                  <td>Customer has submitted the KYB form and initial documents, but review has not started yet.</td>
+                  <td>RM advances from KYB Form Pending after confirming document package is received.</td>
+                  <td>Arianna or Charlotte picks up → KYB Review.</td>
+                  <td><span class="owner-chip owner-kyb">Arianna</span><span class="ref-alert" style="margin-top:4px;display:block">Pick up within 1 business day</span></td>
+                  <td><span class="tag tag-blue" style="font-size:10px">Active</span></td>
                 </tr>
                 <tr>
                   <td><span class="tag tag-blue">KYB Review</span></td>
-                  <td>Arianna is actively reviewing the case file. This is an internal working state.</td>
-                  <td>Arianna explicitly changes state to KYB Review before beginning review. Do not review without updating state first.</td>
-                  <td>(a) Review complete → Compliance Review<br>(b) Docs needed → Waiting Customer<br>(c) Cannot proceed → Abandoned (with RM awareness)</td>
-                  <td><span class="owner-chip owner-kyb">Arianna</span></td>
-                  <td><span class="ref-alert">Identify ALL blockers in one review cycle. Sending back incrementally for separate issues multiplies turnaround time.</span></td>
+                  <td>KYB Team is reviewing document quality and completeness.</td>
+                  <td>Reviewer changes state to KYB Review before starting. Required — do not review without updating state.</td>
+                  <td>(a) Complete → Compliance Review<br>(b) Docs needed → Waiting Customer<br>(c) Cannot proceed → Abandoned</td>
+                  <td><span class="owner-chip owner-kyb">Arianna</span> or <span class="owner-chip owner-kyb">Charlotte</span><span class="ref-note" style="margin-top:4px;display:block">All blockers in one review cycle</span></td>
+                  <td><span class="tag tag-blue" style="font-size:10px">Active</span></td>
                 </tr>
                 <tr>
                   <td><span class="tag tag-orange">Waiting Customer</span></td>
-                  <td>Case is blocked. Customer must provide additional documents or information. <em>Triggered By</em> identifies which team (KYB or Compliance) initiated the wait.</td>
-                  <td>Reviewer transitions from KYB Review or Compliance Review. <strong>Triggered By</strong> and at least one <strong>Blocker Category</strong> are required fields before transition.</td>
-                  <td>Customer submits required documents → RM ticks Customer Responded → Reviewer picks up within 4 business hours and clears the checkbox.</td>
-                  <td><span class="owner-chip owner-rm">Selina Chang</span><br><small style="color:#8c8c8c;font-size:10px;margin-top:4px;display:block">Reviewer owns pickup on response.</small></td>
-                  <td><span class="ref-alert">Do NOT use for internal delays — use Blocker H, log in Activity Log, keep case in review state, and notify Ops PM.</span></td>
+                  <td>Customer action required — document resubmission or additional clarification.</td>
+                  <td>Reviewer transitions from KYB Review or Compliance Review. Triggered By and at least one Blocker Category required before transition.</td>
+                  <td>Customer submits → RM ticks Customer Responded → Reviewer picks up within 4 business hours.</td>
+                  <td><span class="owner-chip owner-rm">Selina Chang</span><span class="ref-note" style="margin-top:4px;display:block">Reviewer owns pickup on response</span></td>
+                  <td><span class="tag tag-blue" style="font-size:10px">Active</span></td>
                 </tr>
                 <tr>
                   <td><span class="tag tag-purple">Compliance Review</span></td>
-                  <td>KYB review is complete. SG Compliance conducts compliance assessment: PEP and sanctions screening, source of funds, business legitimacy.</td>
-                  <td>Arianna advances from KYB Review when all KYB criteria are fully met.</td>
-                  <td>(a) Compliant → Approved<br>(b) Docs needed → Waiting Customer (Triggered By: Compliance)<br>(c) Elevated risk → EDD<br>(d) Non-compliant → Rejected</td>
-                  <td><span class="owner-chip owner-compliance">SG Compliance</span></td>
-                  <td><span class="ref-note">Pick up within 1 business day of handoff from KYB.</span></td>
+                  <td>Compliance is reviewing risk, business legitimacy, source of funds/wealth, ownership, or regulatory concerns.</td>
+                  <td>KYB Checker advances from KYB Review when all KYB criteria are met.</td>
+                  <td>(a) Compliant → Approved<br>(b) Docs needed → Waiting Customer (Compliance)<br>(c) Elevated risk → EDD<br>(d) Non-compliant → Rejected</td>
+                  <td><span class="owner-chip owner-compliance">XinTing</span> or <span class="owner-chip owner-compliance">Chung Yee</span></td>
+                  <td><span class="tag tag-blue" style="font-size:10px">Active</span></td>
                 </tr>
                 <tr>
                   <td><span class="tag tag-red">EDD</span></td>
-                  <td>Enhanced Due Diligence triggered by a specific compliance risk flag requiring deeper investigation beyond standard review.</td>
-                  <td>SG Compliance triggers from Compliance Review <strong>only</strong> when: (1) confirmed PEP match, (2) sanctions list match, (3) adverse media linking principal to fraud or regulatory action, or (4) unexplained source of funds at transaction volume.</td>
-                  <td>(a) EDD complete, risk acceptable → Approved<br>(b) Risk unacceptable → Rejected</td>
+                  <td>Enhanced due diligence required due to higher risk or complexity.</td>
+                  <td>SG Compliance triggers from Compliance Review only for: confirmed PEP, sanctions match, adverse media, or unexplained source of funds. Not triggered for document issues.</td>
+                  <td>(a) Risk acceptable → Approved<br>(b) Risk unacceptable → Rejected</td>
                   <td><span class="owner-chip owner-compliance">SG Compliance</span></td>
-                  <td><span class="ref-alert">EDD is NOT triggered for document completeness issues. Do not contact the customer without Compliance direction.</span></td>
+                  <td><span class="tag tag-blue" style="font-size:10px">Active</span></td>
                 </tr>
                 <tr>
                   <td><span class="tag tag-green">Approved</span></td>
-                  <td>Customer has cleared all review stages and is approved to onboard.</td>
-                  <td>SG Compliance approves after completing Compliance Review or EDD.</td>
-                  <td>Terminal. RM notifies customer of approval outcome.</td>
+                  <td>Customer passed KYB. Cleared to onboard.</td>
+                  <td>Compliance Checker approves after completing Compliance Review or EDD.</td>
+                  <td>Terminal. RM notifies customer.</td>
                   <td>—</td>
-                  <td><span class="ref-note">Approval must be documented with reviewer name and date in Activity Log before state is changed.</span></td>
+                  <td><span class="tag tag-gray" style="font-size:10px">Closed</span></td>
                 </tr>
                 <tr>
                   <td><span class="tag tag-red">Rejected</span></td>
-                  <td>Case rejected based on compliance or KYB assessment. Customer cannot onboard.</td>
-                  <td>Arianna or SG Compliance rejects with a documented reason recorded in Activity Log.</td>
-                  <td>Terminal. RM must be notified to communicate outcome to customer within 1 business day.</td>
+                  <td>Customer failed KYB or was rejected by Compliance. Cannot onboard.</td>
+                  <td>Arianna, Charlotte, or Compliance rejects with documented reason in Activity Log.</td>
+                  <td>Terminal. RM notifies customer within 1 business day.</td>
                   <td>—</td>
-                  <td><span class="ref-alert">Rejection reason must be recorded before state is changed. Do not reject without a logged finding.</span></td>
+                  <td><span class="tag tag-gray" style="font-size:10px">Closed</span></td>
                 </tr>
                 <tr>
                   <td><span class="tag tag-gray">Abandoned</span></td>
-                  <td>Customer did not respond to follow-up or explicitly withdrew from onboarding.</td>
-                  <td>RM marks Abandoned after 3 unanswered follow-up attempts within 14 days, or on explicit customer withdrawal. Ops PM must be notified first.</td>
-                  <td>Terminal. A customer who re-engages later requires a new case to be opened.</td>
+                  <td>Customer stopped progressing or did not respond for a defined period.</td>
+                  <td>RM marks Abandoned with an Abandoned Reason: after 3 unanswered attempts in 14 days, or on explicit customer withdrawal.</td>
+                  <td>Terminal. Customer may re-engage and require a new case.</td>
                   <td><span class="owner-chip owner-rm">Selina Chang</span></td>
-                  <td><span class="ref-note">Document final contact attempt and reason for abandonment in Activity Log before changing state.</span></td>
+                  <td><span class="tag tag-gray" style="font-size:10px">Closed</span></td>
                 </tr>
               </tbody>
             </table>
@@ -315,7 +315,7 @@
                       <li>Log every customer contact attempt with date and outcome</li>
                       <li>Set and update Next Follow-up Date after each contact</li>
                       <li>Tick Customer Responded immediately when customer submits documents</li>
-                      <li>Advance Registration Pending → KYB Submitted after confirming document submission</li>
+                      <li>Advance KYB Form Pending → KYB Submitted after confirming document submission</li>
                       <li>Mark Abandoned after 3 unanswered attempts within 14 days — notify Ops PM first</li>
                     </ul>
                   </div>
@@ -429,11 +429,11 @@
           <textarea class="form-textarea" placeholder="Initial context, source of lead, any known flags…"></textarea>
         </div>
       </div>
-      <p style="font-size:12px;color:#8c8c8c;margin-top:4px">Initial state: <strong>Registration Pending</strong>. Case ID will be auto-assigned.</p>
+      <p style="font-size:12px;color:#8c8c8c;margin-top:4px">Initial state: <strong>KYB Form Pending</strong>. Case ID will be auto-assigned.</p>
     </div>
     <div class="modal-footer">
       <button class="btn btn-default" onclick="closeModal('create-modal')">Cancel</button>
-      <button class="btn btn-primary" onclick="alert('Demo: Case would be created with next sequential ID (KYB-011). State: Registration Pending.');closeModal('create-modal')">Create Case</button>
+      <button class="btn btn-primary" onclick="alert('Demo: Case would be created with next sequential ID (KYB-011). State: KYB Form Pending.');closeModal('create-modal')">Create Case</button>
     </div>
   </div>
 </div>
