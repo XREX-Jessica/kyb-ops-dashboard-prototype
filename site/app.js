@@ -29,11 +29,11 @@ const BLOCKER_CODES = {
   A: 'Document quality',
   B: 'Document completeness',
   C: 'Translation required',
-  D: 'Beneficial ownership / UBO',
+  D: 'Ownership transparency',
   E: 'Source of funds / wealth',
-  F: 'Business legitimacy',
-  G: 'Adverse findings',
-  H: 'Internal / process issue',
+  F: 'Business activity verification',
+  G: 'Regulatory / risk concern',
+  H: 'Internal process issue',
 };
 
 const TERMINAL_STATES = ['Approved', 'Rejected', 'Abandoned'];
