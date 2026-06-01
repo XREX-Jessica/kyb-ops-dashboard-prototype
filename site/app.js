@@ -476,7 +476,7 @@ const VIEW_CONFIG = {
   waiting_customer: {
     label: 'Waiting Customer',
     filter: (c) => c.currentState === 'Waiting Customer',
-    columns: ['id', 'company', 'triggeredBy', 'blockerFull', 'aging', 'lastContact', 'contactAttempts', 'nextFollowup', 'responded', 'nextAction'],
+    columns: ['id', 'company', 'triggeredBy', 'blockerFull', 'aging', 'daysSinceContact', 'contactAttempts', 'nextFollowup', 'responded', 'nextAction'],
     sort: (a, b) => {
       // Customer responded (handled but still shown) floats down
       if (a.customerResponded !== b.customerResponded) return a.customerResponded ? 1 : -1;
@@ -533,7 +533,7 @@ const VIEW_CONFIG = {
   mgmt: {
     label: 'Management Overview',
     filter: (c) => !TERMINAL_STATES.includes(c.currentState),
-    columns: ['id', 'company', 'state', 'currentOwner', 'aging', 'totalDays', 'blockerFull', 'nextAction'],
+    columns: ['id', 'company', 'state', 'currentOwner', 'slaStatus', 'aging', 'blockerFull', 'nextAction'],
     sort: defaultSort,
   },
 };
@@ -610,6 +610,25 @@ function renderCell(col, c) {
     case 'complianceReviewer': return c.complianceReviewer || '<span style="color:#8c8c8c">—</span>';
     case 'triggeredBy': return c.triggeredBy ? `<span class="tag tag-blue">${c.triggeredBy}</span>` : '<span style="color:#d9d9d9">—</span>';
 
+    // Days since last contact — more useful than the raw date for Selina's follow-up decisions
+    case 'daysSinceContact': {
+      if (!c.lastCustomerContact) return '<span class="action-warning">Never contacted</span>';
+      const days = Math.floor((new Date(TODAY) - new Date(c.lastCustomerContact)) / 86400000);
+      if (days === 0) return '<span style="color:#52c41a;font-weight:600">Today</span>';
+      const clr = days >= 4 ? 'color:#ff4d4f;font-weight:700' : days >= 2 ? 'color:#fa8c16' : 'color:#595959';
+      return `<span style="${clr}">${days}d ago</span>`;
+    }
+
+    // 7-day SLA status — tells Winston whether each case is on track without requiring mental math
+    case 'slaStatus': {
+      if (TERMINAL_STATES.includes(c.currentState)) return '<span class="tag tag-gray">Closed</span>';
+      const total = Math.floor((new Date(TODAY) - new Date(c.registrationDate)) / 86400000);
+      if (total <= 5) return `<span class="tag tag-green">Day ${total} / 7</span>`;
+      if (total === 6) return `<span class="tag tag-orange">Day 6 / 7</span>`;
+      if (total === 7) return `<span class="tag tag-orange" style="font-weight:700">Day 7 — due</span>`;
+      return `<span class="tag tag-red" style="font-weight:700">⚠ Day ${total} — over SLA</span>`;
+    }
+
     case 'lastContact':
       if (!c.lastCustomerContact) return '<span style="color:#d9d9d9">Never</span>';
       return `<span style="color:#595959">${c.lastCustomerContact}</span>`;
@@ -659,7 +678,9 @@ const COL_LABELS = {
   kybReviewer: 'KYB Reviewer',
   complianceReviewer: 'Compliance',
   triggeredBy: 'Triggered By',
-  lastContact: 'Last Contact',
+  daysSinceContact: 'Last Contact',
+  slaStatus: '7-Day SLA',
+  lastContact: 'Contact Date',
   nextFollowup: 'Follow-up Date',
   responded: 'Response',
   responseDate: 'Response Date',

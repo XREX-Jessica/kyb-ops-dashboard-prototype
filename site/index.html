@@ -114,6 +114,278 @@
         </div>
       </div>
 
+      <!-- ── Operational Reference ── -->
+      <div class="ref-section">
+        <div class="ref-toggle-bar" id="ref-toggle-bar" onclick="toggleRef()">
+          <span class="ref-toggle-label">📖 Operational Reference — shared definitions for Lifecycle States · Blocker Codes · Role Responsibilities</span>
+          <span class="ref-toggle-caret" id="ref-caret">▼ Show</span>
+        </div>
+        <div id="ref-body" style="display:none">
+          <div class="ref-tabs">
+            <button class="ref-tab-btn active" onclick="showRefTab('states',this)">Lifecycle States</button>
+            <button class="ref-tab-btn" onclick="showRefTab('blockers',this)">Blocker Codes</button>
+            <button class="ref-tab-btn" onclick="showRefTab('roles',this)">Role Responsibilities</button>
+          </div>
+
+          <!-- ── Tab 1: Lifecycle States ── -->
+          <div class="ref-content active" id="ref-states">
+            <table class="ref-table">
+              <thead>
+                <tr>
+                  <th style="width:160px">State</th>
+                  <th style="width:22%">Definition</th>
+                  <th style="width:20%">Entry Criteria</th>
+                  <th style="width:20%">Exit Criteria</th>
+                  <th style="width:130px">Owner</th>
+                  <th>Key Rule</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><span class="tag tag-gray">Registration Pending</span></td>
+                  <td>Customer has completed product registration. KYB documents not yet submitted.</td>
+                  <td>RM creates case at point of customer registration.</td>
+                  <td>RM confirms document submission and manually advances to KYB Submitted.</td>
+                  <td><span class="owner-chip owner-rm">Selina Chang</span></td>
+                  <td><span class="ref-note">Follow up within 3 business days if no submission received.</span></td>
+                </tr>
+                <tr>
+                  <td><span class="tag tag-blue">KYB Submitted</span></td>
+                  <td>Customer has submitted KYB documents. Case is queued for reviewer assignment and pickup.</td>
+                  <td>RM advances from Registration Pending after confirming the document package is received and visually complete. Do not advance if the package is obviously incomplete.</td>
+                  <td>Arianna picks up the case → KYB Review.</td>
+                  <td><span class="owner-chip owner-kyb">Arianna</span></td>
+                  <td><span class="ref-alert">Must be picked up within 1 business day. If unassigned >1 day, Ops PM escalates.</span></td>
+                </tr>
+                <tr>
+                  <td><span class="tag tag-blue">KYB Review</span></td>
+                  <td>Arianna is actively reviewing the case file. This is an internal working state.</td>
+                  <td>Arianna explicitly changes state to KYB Review before beginning review. Do not review without updating state first.</td>
+                  <td>(a) Review complete → Compliance Review<br>(b) Docs needed → Waiting Customer<br>(c) Cannot proceed → Abandoned (with RM awareness)</td>
+                  <td><span class="owner-chip owner-kyb">Arianna</span></td>
+                  <td><span class="ref-alert">Identify ALL blockers in one review cycle. Sending back incrementally for separate issues multiplies turnaround time.</span></td>
+                </tr>
+                <tr>
+                  <td><span class="tag tag-orange">Waiting Customer</span></td>
+                  <td>Case is blocked. Customer must provide additional documents or information. <em>Triggered By</em> identifies which team (KYB or Compliance) initiated the wait.</td>
+                  <td>Reviewer transitions from KYB Review or Compliance Review. <strong>Triggered By</strong> and at least one <strong>Blocker Category</strong> are required fields before transition.</td>
+                  <td>Customer submits required documents → RM ticks Customer Responded → Reviewer picks up within 4 business hours and clears the checkbox.</td>
+                  <td><span class="owner-chip owner-rm">Selina Chang</span><br><small style="color:#8c8c8c;font-size:10px;margin-top:4px;display:block">Reviewer owns pickup on response.</small></td>
+                  <td><span class="ref-alert">Do NOT use for internal delays — use Blocker H, log in Activity Log, keep case in review state, and notify Ops PM.</span></td>
+                </tr>
+                <tr>
+                  <td><span class="tag tag-purple">Compliance Review</span></td>
+                  <td>KYB review is complete. SG Compliance conducts compliance assessment: PEP and sanctions screening, source of funds, business legitimacy.</td>
+                  <td>Arianna advances from KYB Review when all KYB criteria are fully met.</td>
+                  <td>(a) Compliant → Approved<br>(b) Docs needed → Waiting Customer (Triggered By: Compliance)<br>(c) Elevated risk → EDD<br>(d) Non-compliant → Rejected</td>
+                  <td><span class="owner-chip owner-compliance">SG Compliance</span></td>
+                  <td><span class="ref-note">Pick up within 1 business day of handoff from KYB.</span></td>
+                </tr>
+                <tr>
+                  <td><span class="tag tag-red">EDD</span></td>
+                  <td>Enhanced Due Diligence triggered by a specific compliance risk flag requiring deeper investigation beyond standard review.</td>
+                  <td>SG Compliance triggers from Compliance Review <strong>only</strong> when: (1) confirmed PEP match, (2) sanctions list match, (3) adverse media linking principal to fraud or regulatory action, or (4) unexplained source of funds at transaction volume.</td>
+                  <td>(a) EDD complete, risk acceptable → Approved<br>(b) Risk unacceptable → Rejected</td>
+                  <td><span class="owner-chip owner-compliance">SG Compliance</span></td>
+                  <td><span class="ref-alert">EDD is NOT triggered for document completeness issues. Do not contact the customer without Compliance direction.</span></td>
+                </tr>
+                <tr>
+                  <td><span class="tag tag-green">Approved</span></td>
+                  <td>Customer has cleared all review stages and is approved to onboard.</td>
+                  <td>SG Compliance approves after completing Compliance Review or EDD.</td>
+                  <td>Terminal. RM notifies customer of approval outcome.</td>
+                  <td>—</td>
+                  <td><span class="ref-note">Approval must be documented with reviewer name and date in Activity Log before state is changed.</span></td>
+                </tr>
+                <tr>
+                  <td><span class="tag tag-red">Rejected</span></td>
+                  <td>Case rejected based on compliance or KYB assessment. Customer cannot onboard.</td>
+                  <td>Arianna or SG Compliance rejects with a documented reason recorded in Activity Log.</td>
+                  <td>Terminal. RM must be notified to communicate outcome to customer within 1 business day.</td>
+                  <td>—</td>
+                  <td><span class="ref-alert">Rejection reason must be recorded before state is changed. Do not reject without a logged finding.</span></td>
+                </tr>
+                <tr>
+                  <td><span class="tag tag-gray">Abandoned</span></td>
+                  <td>Customer did not respond to follow-up or explicitly withdrew from onboarding.</td>
+                  <td>RM marks Abandoned after 3 unanswered follow-up attempts within 14 days, or on explicit customer withdrawal. Ops PM must be notified first.</td>
+                  <td>Terminal. A customer who re-engages later requires a new case to be opened.</td>
+                  <td><span class="owner-chip owner-rm">Selina Chang</span></td>
+                  <td><span class="ref-note">Document final contact attempt and reason for abandonment in Activity Log before changing state.</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- ── Tab 2: Blocker Codes ── -->
+          <div class="ref-content" id="ref-blockers">
+            <div class="blocker-ref-grid">
+              <div class="blocker-ref-card">
+                <div class="blocker-ref-header"><span class="blocker-ref-code">A</span><span class="blocker-ref-name">Document Quality</span></div>
+                <div class="blocker-ref-body">
+                  <div class="blocker-ref-def">The submitted document cannot be accepted due to format, legibility, or validity issues.</div>
+                  <div class="blocker-ref-label">Examples</div>
+                  <div class="blocker-ref-examples">Screenshot or phone photo instead of a scanned PDF · Blurry or dark scan where text is unreadable · Expired document (passport, license, registration cert) · Black-and-white copy when color is required</div>
+                  <div class="blocker-ref-label">Request</div>
+                  <span class="blocker-ref-request">"Please resubmit [document name] as a clear, color PDF scan. The document must be valid and unexpired, with all text clearly legible."</span>
+                </div>
+              </div>
+              <div class="blocker-ref-card">
+                <div class="blocker-ref-header"><span class="blocker-ref-code">B</span><span class="blocker-ref-name">Document Completeness</span></div>
+                <div class="blocker-ref-body">
+                  <div class="blocker-ref-def">The required document exists but is not fully submitted.</div>
+                  <div class="blocker-ref-label">Examples</div>
+                  <div class="blocker-ref-examples">Signature page missing from incorporation certificate · Pages 3–5 missing from bank statement · Form submitted with required sections left blank</div>
+                  <div class="blocker-ref-label">Request</div>
+                  <span class="blocker-ref-request">"Please resubmit the complete [document name]. The following is missing: [specify page / section / signature]."</span>
+                </div>
+              </div>
+              <div class="blocker-ref-card">
+                <div class="blocker-ref-header"><span class="blocker-ref-code">C</span><span class="blocker-ref-name">Translation Required</span></div>
+                <div class="blocker-ref-body">
+                  <div class="blocker-ref-def">Document is in a language other than English or Traditional Chinese and requires a certified translation.</div>
+                  <div class="blocker-ref-label">Examples</div>
+                  <div class="blocker-ref-examples">Mandarin-only incorporation certificate · Arabic bank statement · Japanese company profile or registry extract</div>
+                  <div class="blocker-ref-label">Request</div>
+                  <span class="blocker-ref-request">"Please submit a certified English translation of [document], signed and stamped by a licensed translator. Submit the original and translation together."</span>
+                </div>
+              </div>
+              <div class="blocker-ref-card">
+                <div class="blocker-ref-header"><span class="blocker-ref-code">D</span><span class="blocker-ref-name">Beneficial Ownership / UBO</span></div>
+                <div class="blocker-ref-body">
+                  <div class="blocker-ref-def">Beneficial ownership structure cannot be confirmed from submitted documents. All natural persons holding >25% must be identified and verified.</div>
+                  <div class="blocker-ref-label">Examples</div>
+                  <div class="blocker-ref-examples">Corporate shareholder with no natural persons identified below · UBO holding >25% not declared · Identity documents (passport or national ID) missing for one or more UBOs</div>
+                  <div class="blocker-ref-label">Request</div>
+                  <span class="blocker-ref-request">"Please submit: (1) UBO declaration form naming all natural persons with >25% beneficial ownership; (2) Passport or national ID copy for each identified UBO."</span>
+                </div>
+              </div>
+              <div class="blocker-ref-card">
+                <div class="blocker-ref-header"><span class="blocker-ref-code">E</span><span class="blocker-ref-name">Source of Funds / Source of Wealth</span></div>
+                <div class="blocker-ref-body">
+                  <div class="blocker-ref-def">The origin of funds (SoF) or accumulated wealth (SoW) cannot be verified. <strong>SoF</strong> = where the transaction funds came from. <strong>SoW</strong> = how the UBO accumulated their overall wealth. Both may be required for high-volume or complex cases.</div>
+                  <div class="blocker-ref-label">Examples</div>
+                  <div class="blocker-ref-examples">Bank statement insufficient for declared transaction volume · Unexplained large inflows · No business income documentation · Unusual net worth relative to stated business activities</div>
+                  <div class="blocker-ref-label">Request</div>
+                  <span class="blocker-ref-request">"Please provide bank statements (6–12 months) and documentation of business income — audited financials, tax returns, or invoices. For SoW: a written statement with supporting evidence (property records, investment statements)."</span>
+                </div>
+              </div>
+              <div class="blocker-ref-card">
+                <div class="blocker-ref-header"><span class="blocker-ref-code">F</span><span class="blocker-ref-name">Business Legitimacy</span></div>
+                <div class="blocker-ref-body">
+                  <div class="blocker-ref-def">Stated business activities cannot be verified or are inconsistent with submitted documentation.</div>
+                  <div class="blocker-ref-label">Examples</div>
+                  <div class="blocker-ref-examples">Business license scope does not match stated activities · Website inaccessible or describes different services · Trading volume claimed is inconsistent with business size or history</div>
+                  <div class="blocker-ref-label">Request</div>
+                  <span class="blocker-ref-request">"Please provide: business license (showing permitted activities), company website URL, and a brief description of your primary business activities and customers or suppliers."</span>
+                </div>
+              </div>
+              <div class="blocker-ref-card">
+                <div class="blocker-ref-header"><span class="blocker-ref-code">G</span><span class="blocker-ref-name">Adverse Findings</span></div>
+                <div class="blocker-ref-body">
+                  <div class="blocker-ref-def">Screening has returned a match or finding that requires compliance review before any further action.</div>
+                  <div class="blocker-ref-label">Examples</div>
+                  <div class="blocker-ref-examples">PEP (Politically Exposed Person) match on director or UBO · OFAC / UN / local sanctions list match · Adverse media linking a principal to regulatory action, fraud, or financial crime</div>
+                  <span class="blocker-ref-alert">⚠ Do NOT request documents from the customer for Category G findings. All actions must be directed by SG Compliance. This case may require EDD. Escalate immediately and do not advance state without Compliance instruction.</span>
+                </div>
+              </div>
+              <div class="blocker-ref-card">
+                <div class="blocker-ref-header"><span class="blocker-ref-code">H</span><span class="blocker-ref-name">Internal / Process Issue</span></div>
+                <div class="blocker-ref-body">
+                  <div class="blocker-ref-def">The delay is caused by an internal issue — not by the customer.</div>
+                  <div class="blocker-ref-label">Examples</div>
+                  <div class="blocker-ref-examples">Reviewer unavailable due to leave · Unclear internal ownership · Pending legal or compliance opinion · System access issue</div>
+                  <span class="blocker-ref-alert">⚠ Do NOT send the case to Waiting Customer for Blocker H. Case stays in the reviewer's current state. Log the issue in Activity Log and notify Ops PM. The customer is not responsible for internal delays and must not be contacted about them.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ── Tab 3: Role Responsibilities ── -->
+          <div class="ref-content" id="ref-roles">
+            <div class="role-cards">
+              <div class="role-card">
+                <div class="role-card-header rm">Selina Chang — RM</div>
+                <div class="role-card-body">
+                  <div class="role-section">
+                    <div class="role-section-title">Responsibilities</div>
+                    <ul>
+                      <li>Create KYB cases at point of customer registration</li>
+                      <li>Maintain customer relationship throughout the onboarding lifecycle</li>
+                      <li>Log every customer contact attempt with date and outcome</li>
+                      <li>Set and update Next Follow-up Date after each contact</li>
+                      <li>Tick Customer Responded immediately when customer submits documents</li>
+                      <li>Advance Registration Pending → KYB Submitted after confirming document submission</li>
+                      <li>Mark Abandoned after 3 unanswered attempts within 14 days — notify Ops PM first</li>
+                    </ul>
+                  </div>
+                  <div class="role-section dont">
+                    <div class="role-section-title">Does NOT</div>
+                    <ul>
+                      <li>Assess or review KYB documents — Arianna's scope</li>
+                      <li>Change state to KYB Review, Compliance Review, or EDD</li>
+                      <li>Remove the Customer Responded checkbox — reviewer's action</li>
+                      <li>Contact customer about compliance findings — SG Compliance directs this</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div class="role-card">
+                <div class="role-card-header kyb">Arianna — KYB Reviewer</div>
+                <div class="role-card-body">
+                  <div class="role-section">
+                    <div class="role-section-title">Responsibilities</div>
+                    <ul>
+                      <li>Pick up KYB Submitted cases within 1 business day</li>
+                      <li>Change state to KYB Review explicitly before starting review</li>
+                      <li>Identify ALL blockers in a single review cycle</li>
+                      <li>Log all blockers with specific notes before entering Waiting Customer</li>
+                      <li>Pick up from Returned from Customer queue within 4 business hours</li>
+                      <li>Clear the Customer Responded checkbox when picking up a returned case</li>
+                      <li>Advance to Compliance Review only when all KYB criteria are fully met</li>
+                    </ul>
+                  </div>
+                  <div class="role-section dont">
+                    <div class="role-section-title">Does NOT</div>
+                    <ul>
+                      <li>Contact customers directly — Selina's scope</li>
+                      <li>Make decisions on sanctions, PEP, or adverse media — escalate to SG Compliance</li>
+                      <li>Approve or reject cases</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div class="role-card">
+                <div class="role-card-header comp">SG Compliance</div>
+                <div class="role-card-body">
+                  <div class="role-section">
+                    <div class="role-section-title">Responsibilities</div>
+                    <ul>
+                      <li>Pick up Compliance Review cases within 1 business day</li>
+                      <li>Conduct PEP screening, sanctions screening, and adverse media review</li>
+                      <li>Assess source of funds and source of wealth as required</li>
+                      <li>Trigger Waiting Customer (Triggered By: Compliance) when additional documents are needed</li>
+                      <li>Trigger EDD when specific risk criteria are met</li>
+                      <li>Issue Approved or Rejected with findings documented in Activity Log before state change</li>
+                      <li>Manage EDD cases through to a final decision</li>
+                    </ul>
+                  </div>
+                  <div class="role-section dont">
+                    <div class="role-section-title">Does NOT</div>
+                    <ul>
+                      <li>Review KYB-layer documents — Arianna's scope</li>
+                      <li>Contact customers directly — Selina's scope</li>
+                      <li>Issue Approved or Rejected without a logged finding</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- end ref-body -->
+      </div><!-- end ref-section -->
+
     </div>
   </div>
 
@@ -143,14 +415,12 @@
         <div class="form-group">
           <label class="form-label">RM Owner *</label>
           <select class="form-select">
-            <option>Sarah Lin</option>
-            <option>Mike Tan</option>
-            <option>Tom Chang</option>
+            <option>Selina Chang</option>
           </select>
         </div>
         <div class="form-group">
           <label class="form-label">Registration Date *</label>
-          <input class="form-input" type="date" value="2026-05-29" />
+          <input class="form-input" type="date" value="2026-06-01" />
         </div>
       </div>
       <div class="form-row">
@@ -171,6 +441,23 @@
 <script src="app.js"></script>
 <script>
   document.addEventListener('DOMContentLoaded', initIndex);
+
+  function toggleRef() {
+    const body = document.getElementById('ref-body');
+    const caret = document.getElementById('ref-caret');
+    const bar = document.getElementById('ref-toggle-bar');
+    const open = body.style.display === 'none';
+    body.style.display = open ? '' : 'none';
+    caret.textContent = open ? '▲ Hide' : '▼ Show';
+    bar.classList.toggle('open', open);
+  }
+
+  function showRefTab(tab, btn) {
+    document.querySelectorAll('.ref-content').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.ref-tab-btn').forEach(el => el.classList.remove('active'));
+    document.getElementById('ref-' + tab).classList.add('active');
+    btn.classList.add('active');
+  }
 </script>
 </body>
 </html>
