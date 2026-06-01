@@ -7,11 +7,6 @@ function daysAgo(n) {
   return d.toISOString().slice(0, 10);
 }
 
-function agingFlag(days) {
-  if (days < 3) return 'green';
-  if (days <= 5) return 'yellow';
-  return 'red';
-}
 
 const STATE_COLORS = {
   'KYB Form Pending':  'gray',
@@ -422,9 +417,7 @@ function stateTagClass(state) {
 
 function agingHtml(stateEntryDate) {
   const days = getDaysInState(stateEntryDate);
-  const flag = agingFlag(days);
-  const labels = { green: '🟢', yellow: '🟡', red: '🔴' };
-  return `<span class="aging-dot ${flag}">${labels[flag]} ${days}d</span>`;
+  return `${days}d`;
 }
 
 // ── Who must take the next action on this case? ──
