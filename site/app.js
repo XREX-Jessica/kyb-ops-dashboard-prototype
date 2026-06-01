@@ -470,10 +470,6 @@ function getNextAction(c) {
 }
 
 function defaultSort(a, b) {
-  const af = agingFlag(getDaysInState(a.stateEntryDate));
-  const bf = agingFlag(getDaysInState(b.stateEntryDate));
-  const order = { red: 0, yellow: 1, green: 2 };
-  if (order[af] !== order[bf]) return order[af] - order[bf];
   return getDaysInState(b.stateEntryDate) - getDaysInState(a.stateEntryDate);
 }
 
@@ -532,12 +528,6 @@ const VIEW_CONFIG = {
       if (a.customerResponded !== b.customerResponded) return a.customerResponded ? -1 : 1;
       return defaultSort(a, b);
     },
-  },
-  aging_queue: {
-    label: 'Aging / Overdue',
-    filter: (c) => agingFlag(getDaysInState(c.stateEntryDate)) === 'red' && !TERMINAL_STATES.includes(c.currentState),
-    columns: ['id', 'company', 'state', 'currentAssignee', 'aging', 'blockerFull', 'nextAction'],
-    sort: (a, b) => getDaysInState(b.stateEntryDate) - getDaysInState(a.stateEntryDate),
   },
   mgmt: {
     label: 'Management Overview',
@@ -751,7 +741,6 @@ function renderTable() {
 // ── Winston's bottleneck view ──
 function renderMgmtStats(el) {
   const active = CASES.filter(c => !TERMINAL_STATES.includes(c.currentState));
-  const red      = active.filter(c => agingFlag(getDaysInState(c.stateEntryDate)) === 'red').length;
   const waiting  = active.filter(c => c.currentState === 'Waiting Customer').length;
   const returned = active.filter(c => c.customerResponded).length;
   const unassigned = active.filter(c => getCurrentAssignee(c) === null).length;
@@ -771,18 +760,10 @@ function renderMgmtStats(el) {
   const stageRows = PIPELINE_STAGES.map(stage => {
     const cases = active.filter(c => c.currentState === stage);
     if (cases.length === 0) return '';
-    const overdueCount = cases.filter(c => agingFlag(getDaysInState(c.stateEntryDate)) === 'red').length;
     const avgDays = (cases.reduce((s, c) => s + getDaysInState(c.stateEntryDate), 0) / cases.length).toFixed(1);
-    const isBottleneck = overdueCount >= 2 || (cases.length >= 3 && overdueCount >= 1);
-    const rowStyle = isBottleneck ? ' class="bottleneck-row"' : '';
-    const overdueHtml = overdueCount > 0
-      ? `<span style="color:#ff4d4f;font-weight:700">${overdueCount} 🔴</span>`
-      : `<span style="color:#52c41a">0</span>`;
-    const bottleneckBadge = isBottleneck ? ' <span class="tag tag-red" style="font-size:10px">bottleneck</span>' : '';
-    return `<tr${rowStyle}>
-      <td><span class="${stateTagClass(stage)}">${stage}</span>${bottleneckBadge}</td>
+    return `<tr>
+      <td><span class="${stateTagClass(stage)}">${stage}</span></td>
       <td style="text-align:center;font-weight:700">${cases.length}</td>
-      <td style="text-align:center">${overdueHtml}</td>
       <td style="text-align:center;color:#595959">${avgDays}d avg</td>
       <td style="color:#595959;font-size:12px">${STAGE_RESPONSIBLE[stage] || '—'}</td>
     </tr>`;
@@ -791,17 +772,15 @@ function renderMgmtStats(el) {
   el.innerHTML = `
     <div style="display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap">
       <div class="stat-card"><div class="stat-label">Active Cases</div><div class="stat-value">${active.length}</div></div>
-      <div class="stat-card"><div class="stat-label">Overdue 🔴</div><div class="stat-value red">${red}</div></div>
       <div class="stat-card"><div class="stat-label">Waiting Customer</div><div class="stat-value orange">${waiting}</div></div>
       <div class="stat-card"><div class="stat-label">⚡ Pickup Needed</div><div class="stat-value ${returned ? 'red' : 'green'}">${returned}</div></div>
       ${unassigned ? `<div class="stat-card" style="border:1px solid #ffa39e"><div class="stat-label" style="color:#ff4d4f">⚠ Unassigned</div><div class="stat-value red">${unassigned}</div></div>` : ''}
     </div>
     <div style="background:#fff;border-radius:8px;padding:16px 20px;box-shadow:0 1px 3px rgba(0,0,0,0.05)">
-      <div style="font-size:11px;font-weight:600;color:#8c8c8c;text-transform:uppercase;letter-spacing:0.6px;margin-bottom:10px">Stage Bottleneck Analysis</div>
+      <div style="font-size:11px;font-weight:600;color:#8c8c8c;text-transform:uppercase;letter-spacing:0.6px;margin-bottom:10px">Stage Breakdown</div>
       <table class="stage-breakdown">
         <thead><tr>
           <th>Stage</th><th style="text-align:center">Cases</th>
-          <th style="text-align:center">Overdue</th>
           <th style="text-align:center">Avg Days</th>
           <th>Assignee</th>
         </tr></thead>
@@ -839,11 +818,9 @@ function onStateFilter(val) { stateFilter = val; renderTable(); }
 
 function updateBadges() {
   const returned = CASES.filter(c => c.customerResponded).length;
-  const overdue  = CASES.filter(c => agingFlag(getDaysInState(c.stateEntryDate)) === 'red' && !TERMINAL_STATES.includes(c.currentState)).length;
   const waiting  = CASES.filter(c => c.currentState === 'Waiting Customer').length;
   const el = id => document.getElementById(id);
   if (el('badge-returned')) el('badge-returned').textContent = returned || '';
-  if (el('badge-overdue'))  el('badge-overdue').textContent  = overdue  || '';
   if (el('badge-waiting'))  el('badge-waiting').textContent  = waiting  || '';
 }
 
