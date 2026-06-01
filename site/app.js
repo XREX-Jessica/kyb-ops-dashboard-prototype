@@ -135,8 +135,8 @@ const CASES = [
     currentState: 'Compliance Review',
     stateEntryDate: daysAgo(2),
     previousState: 'KYB Review',
-    kybReviewer: 'Arianna',
-    kybChecker: 'Charlotte',
+    kybReviewer: 'Charlotte',
+    kybChecker: 'Arianna',
     complianceReviewer: 'XinTing',
     complianceChecker: 'Chung Yee',
     triggeredBy: null,
@@ -519,7 +519,7 @@ const VIEW_CONFIG = {
   returned: {
     label: '⚡ Returned from Customer',
     filter: (c) => c.customerResponded === true,
-    columns: ['id', 'company', 'currentAssignee', 'triggeredBy', 'responseDate', 'aging', 'blockerFull', 'nextAction'],
+    columns: ['id', 'company', 'currentAssignee', 'triggeredBy', 'responseDate', 'responseAge', 'blockerFull', 'nextAction'],
     sort: (a, b) => new Date(a.responseDate) - new Date(b.responseDate),
   },
   kyb_queue: {
@@ -655,6 +655,14 @@ function renderCell(col, c) {
 
     case 'responseDate': return c.responseDate || '—';
 
+    // Time since customer responded — reviewers must pick up within 4 hours
+    case 'responseAge': {
+      if (!c.responseDate) return '—';
+      const days = Math.floor((new Date(TODAY) - new Date(c.responseDate)) / 86400000);
+      if (days === 0) return '<span class="action-waiting" style="padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600">Returned today ⚠</span>';
+      return `<span class="action-chip action-warning">${days}d — pickup overdue</span>`;
+    }
+
     case 'contactAttempts':
       return `<span style="font-weight:600">${c.contactAttempts || 0}</span>`;
 
@@ -695,6 +703,7 @@ const COL_LABELS = {
   nextFollowup: 'Follow-up Date',
   responded: 'Response',
   responseDate: 'Response Date',
+  responseAge: 'In Queue',
   contactAttempts: 'Attempts',
   waitingRound: 'Wait Round',
   kybSubmissionDate: 'KYB Submitted',

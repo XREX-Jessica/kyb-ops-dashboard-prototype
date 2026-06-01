@@ -215,6 +215,74 @@
                 </tr>
               </tbody>
             </table>
+
+            <!-- EDD Trigger Framework -->
+            <div style="margin-top:24px">
+              <div style="font-size:11px;font-weight:700;color:#8c8c8c;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid #f0f0f0">EDD Trigger Framework — When SG Compliance Escalates to EDD</div>
+              <table class="ref-table">
+                <thead>
+                  <tr><th style="width:110px">Category</th><th>Trigger</th><th style="width:160px">Who Raises</th><th>Threshold</th></tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="tag tag-red">Screening</span></td>
+                    <td>Confirmed sanctions match (OFAC / UN / local list)</td>
+                    <td><span class="owner-chip owner-compliance">SG Compliance</span></td>
+                    <td>Any confirmed match — EDD mandatory</td>
+                  </tr>
+                  <tr>
+                    <td><span class="tag tag-red">Screening</span></td>
+                    <td>Confirmed PEP match on director, UBO, or authorised signatory</td>
+                    <td><span class="owner-chip owner-compliance">SG Compliance</span></td>
+                    <td>Confirmed match — EDD mandatory</td>
+                  </tr>
+                  <tr>
+                    <td><span class="tag tag-orange">Screening</span></td>
+                    <td>Former government official, state enterprise executive, or regulator (below formal PEP threshold)</td>
+                    <td><span class="owner-chip owner-compliance">SG Compliance</span></td>
+                    <td>Judgment — document the reasoning</td>
+                  </tr>
+                  <tr>
+                    <td><span class="tag tag-orange">Screening</span></td>
+                    <td>Adverse media — material and recent (within 5 years), linking principal to financial crime or regulatory action</td>
+                    <td><span class="owner-chip owner-compliance">SG Compliance</span></td>
+                    <td>Judgment — old or unrelated coverage does not require EDD</td>
+                  </tr>
+                  <tr>
+                    <td><span class="tag tag-blue">Ownership</span></td>
+                    <td>Beneficial ownership cannot be confirmed after 2 rounds of document requests</td>
+                    <td><span class="owner-chip owner-kyb">Arianna / Charlotte</span> flags → Compliance decides</td>
+                    <td>KYB escalates; Compliance decides on EDD</td>
+                  </tr>
+                  <tr>
+                    <td><span class="tag tag-blue">Ownership</span></td>
+                    <td>3+ corporate layers with jurisdictional complexity and no clear path to natural persons</td>
+                    <td><span class="owner-chip owner-kyb">Arianna / Charlotte</span> flags → Compliance decides</td>
+                    <td>Judgment — document structure in Activity Log</td>
+                  </tr>
+                  <tr>
+                    <td><span class="tag tag-purple">Jurisdiction</span></td>
+                    <td>Entity or UBO in FATF grey/blacklisted jurisdiction</td>
+                    <td><span class="owner-chip owner-compliance">SG Compliance</span></td>
+                    <td>Check FATF list — flag in Compliance Review</td>
+                  </tr>
+                  <tr>
+                    <td><span class="tag tag-gray">Business</span></td>
+                    <td>Unusual business model or transaction pattern inconsistent with entity type or stated activities</td>
+                    <td><span class="owner-chip owner-compliance">SG Compliance</span></td>
+                    <td>Judgment — document specific concern in Activity Log</td>
+                  </tr>
+                  <tr>
+                    <td><span class="tag tag-gray">Funds</span></td>
+                    <td>Source of funds or wealth remains unexplained after E document requests (Round 1)</td>
+                    <td><span class="owner-chip owner-compliance">SG Compliance</span></td>
+                    <td>After one round of E returns insufficient documentation</td>
+                  </tr>
+                </tbody>
+              </table>
+              <div style="font-size:11px;color:#8c8c8c;margin-top:8px;line-height:1.6">EDD is a Compliance decision — KYB can flag concerns but cannot trigger EDD. Not every G finding requires EDD: a false positive resolved quickly does not. EDD can revert to Compliance Review if elevated risk is cleared, with documented rationale in Activity Log.</div>
+            </div>
+
           </div>
 
           <!-- ── Tab 2: Blocker Codes ── -->
@@ -263,11 +331,20 @@
               <div class="blocker-ref-card">
                 <div class="blocker-ref-header"><span class="blocker-ref-code">E</span><span class="blocker-ref-name">Source of Funds / Source of Wealth</span></div>
                 <div class="blocker-ref-body">
-                  <div class="blocker-ref-def">The origin of funds (SoF) or accumulated wealth (SoW) cannot be verified. <strong>SoF</strong> = where the transaction funds came from. <strong>SoW</strong> = how the UBO accumulated their overall wealth. Both may be required for high-volume or complex cases.</div>
-                  <div class="blocker-ref-label">Examples</div>
-                  <div class="blocker-ref-examples">Bank statement insufficient for declared transaction volume · Unexplained large inflows · No business income documentation · Unusual net worth relative to stated business activities</div>
-                  <div class="blocker-ref-label">Request</div>
-                  <span class="blocker-ref-request">"Please provide bank statements (6–12 months) and documentation of business income — audited financials, tax returns, or invoices. For SoW: a written statement with supporting evidence (property records, investment statements)."</span>
+                  <div class="blocker-ref-def">SoF and SoW are distinct questions requiring different documents. <strong>You must specify which is required when entering Waiting Customer — leaving this ambiguous causes a second round.</strong></div>
+                  <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0">
+                    <div style="background:#f6ffed;border:1px solid #b7eb8f;border-radius:4px;padding:8px">
+                      <div class="blocker-ref-label" style="color:#389e0d">Source of Funds (SoF)</div>
+                      <div style="font-size:11px;color:#595959;margin-top:3px;line-height:1.5"><em>Where did THIS transaction's money come from?</em><br><strong>Documents:</strong> Bank statements 6–12 months · Invoices / payroll · Asset sale records</div>
+                    </div>
+                    <div style="background:#fff7e6;border:1px solid #ffd591;border-radius:4px;padding:8px">
+                      <div class="blocker-ref-label" style="color:#d46b08">Source of Wealth (SoW)</div>
+                      <div style="font-size:11px;color:#595959;margin-top:3px;line-height:1.5"><em>How did the UBO accumulate their overall wealth?</em><br><strong>Documents:</strong> Multi-year financials · Property / investment records · Inheritance docs</div>
+                    </div>
+                  </div>
+                  <div class="blocker-ref-label">When to raise each</div>
+                  <div class="blocker-ref-examples">SoF: transaction volume high or inflows unexplained · SoW: UBO net worth inconsistent with declared income or business size · Both: high-risk profile with significant volume</div>
+                  <span class="blocker-ref-alert">⚠ Select SoF / SoW / Both in the state change modal when entering Waiting Customer with E. The system requires a sub-selection before confirming.</span>
                 </div>
               </div>
               <div class="blocker-ref-card">
@@ -281,12 +358,20 @@
                 </div>
               </div>
               <div class="blocker-ref-card">
-                <div class="blocker-ref-header"><span class="blocker-ref-code">G</span><span class="blocker-ref-name">Adverse Findings</span></div>
+                <div class="blocker-ref-header" style="background:#fff1f0;border-bottom-color:#ffa39e"><span class="blocker-ref-code" style="color:#ff4d4f">G</span><span class="blocker-ref-name" style="color:#a8071a">Adverse Findings — Compliance Escalation Flag</span></div>
                 <div class="blocker-ref-body">
-                  <div class="blocker-ref-def">Screening has returned a match or finding that requires compliance review before any further action.</div>
-                  <div class="blocker-ref-label">Examples</div>
-                  <div class="blocker-ref-examples">PEP (Politically Exposed Person) match on director or UBO · OFAC / UN / local sanctions list match · Adverse media linking a principal to regulatory action, fraud, or financial crime</div>
-                  <span class="blocker-ref-alert">⚠ Do NOT request documents from the customer for Category G findings. All actions must be directed by SG Compliance. This case may require EDD. Escalate immediately and do not advance state without Compliance instruction.</span>
+                  <div class="blocker-ref-def"><strong>G is not a document blocker.</strong> It is a compliance escalation flag. When G is raised, the action is internal — not a customer document request. <strong>G as the sole blocker blocks the Waiting Customer transition.</strong></div>
+                  <div class="blocker-ref-label">Findings that trigger G</div>
+                  <div class="blocker-ref-examples">PEP match on director, UBO, or authorised signatory · OFAC / UN / local sanctions match · Adverse media linking principal to regulatory action, fraud, or financial crime</div>
+                  <div class="blocker-ref-label">Correct action when G is raised</div>
+                  <div style="font-size:11px;color:#595959;line-height:1.7;margin-top:3px">
+                    <strong>1.</strong> Do not contact the customer or request documents.<br>
+                    <strong>2.</strong> Transition to Compliance Review (if not already there).<br>
+                    <strong>3.</strong> Log the specific finding in Activity Log.<br>
+                    <strong>4.</strong> SG Compliance assesses → decides: clear, EDD, or reject.<br>
+                    <strong>5.</strong> EDD is triggered by Compliance only — not by the KYB reviewer.
+                  </div>
+                  <span class="blocker-ref-alert" style="margin-top:6px">⚠ G alone → not Waiting Customer. G + document blockers (e.g. G + D) → Waiting Customer is allowed, but document request must be Compliance-directed.</span>
                 </div>
               </div>
               <div class="blocker-ref-card">

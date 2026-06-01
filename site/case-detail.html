@@ -325,10 +325,24 @@
             <label style="font-size:12px"><input type="checkbox" value="B"> B: Completeness</label>
             <label style="font-size:12px"><input type="checkbox" value="C"> C: Translation</label>
             <label style="font-size:12px"><input type="checkbox" value="D"> D: UBO</label>
-            <label style="font-size:12px"><input type="checkbox" value="E"> E: Source of funds</label>
+            <label style="font-size:12px"><input type="checkbox" value="E"> E: Source of funds/wealth</label>
             <label style="font-size:12px"><input type="checkbox" value="F"> F: Business legitimacy</label>
             <label style="font-size:12px"><input type="checkbox" value="G"> G: Adverse findings</label>
             <label style="font-size:12px"><input type="checkbox" value="H"> H: Internal issue</label>
+          </div>
+          <!-- G warning: escalation flag, not a document request -->
+          <div id="g-blocker-warning" style="display:none;margin-top:10px;padding:10px 12px;background:#fff1f0;border:1px solid #ffa39e;border-radius:6px;font-size:12px;color:#cf1322">
+            <strong>⚠ G — Adverse Findings 是合規升級旗標，不是文件請求。</strong><br>
+            不應向客戶索取文件。若 G 是唯一 Blocker，請勿進入 Waiting Customer — 應直接移轉至 Compliance Review 並在 Activity Log 記錄發現內容。
+          </div>
+          <!-- E sub-selection: SoF / SoW / Both -->
+          <div id="e-type-section" style="display:none;margin-top:10px;padding:10px 12px;background:#e6f4ff;border:1px solid #91caff;border-radius:6px">
+            <div style="font-size:12px;font-weight:600;color:#0958d9;margin-bottom:6px">E — 請指定類型 <span style="color:#ff4d4f">*</span></div>
+            <div style="display:flex;gap:16px;flex-wrap:wrap">
+              <label style="font-size:12px;display:flex;align-items:center;gap:5px"><input type="radio" name="e-sof-sow" value="SoF"> Source of Funds (SoF) — 此次交易資金來源</label>
+              <label style="font-size:12px;display:flex;align-items:center;gap:5px"><input type="radio" name="e-sof-sow" value="SoW"> Source of Wealth (SoW) — UBO 財富積累說明</label>
+              <label style="font-size:12px;display:flex;align-items:center;gap:5px"><input type="radio" name="e-sof-sow" value="Both"> Both required</label>
+            </div>
           </div>
         </div>
         <div class="form-group">
@@ -501,6 +515,13 @@
     document.getElementById('blocker-required-section').style.display = isWaiting   ? '' : 'none';
     document.getElementById('decision-date-section').style.display    = isDecision  ? '' : 'none';
     document.getElementById('abandoned-reason-section').style.display = isAbandoned ? '' : 'none';
+    // Reset blocker state
+    document.querySelectorAll('#modal-blocker-checks input[type="checkbox"]').forEach(cb => cb.checked = false);
+    document.querySelectorAll('input[name="e-sof-sow"]').forEach(r => r.checked = false);
+    document.getElementById('g-blocker-warning').style.display = 'none';
+    document.getElementById('e-type-section').style.display = 'none';
+    document.getElementById('modal-triggered-by').value = '';
+    document.getElementById('modal-blocker-notes').value = '';
     document.getElementById('modal-note').value = '';
     openModal('state-modal');
   }
@@ -513,9 +534,26 @@
     if (isWaiting) {
       const triggeredBy     = document.getElementById('modal-triggered-by').value;
       const checkedBlockers = [...document.querySelectorAll('#modal-blocker-checks input:checked')];
+      const blockerVals     = checkedBlockers.map(b => b.value);
+
       if (!triggeredBy) { alert('Triggered By is required before entering Waiting Customer.'); return; }
       if (checkedBlockers.length === 0) { alert('At least one Blocker Category is required before entering Waiting Customer.'); return; }
-      currentCase.blockerCategories = checkedBlockers.map(b => b.value);
+
+      // G-only block: G is a compliance escalation flag, not a customer document request
+      if (blockerVals.length === 1 && blockerVals[0] === 'G') {
+        alert('G — Adverse Findings 屬合規升級旗標，不應作為進入 Waiting Customer 的唯一原因。\n\n請改為移轉至 Compliance Review，並在 Activity Log 記錄發現內容。');
+        return;
+      }
+
+      // E requires SoF/SoW sub-selection
+      if (blockerVals.includes('E')) {
+        const eType = document.querySelector('input[name="e-sof-sow"]:checked')?.value;
+        if (!eType) { alert('選擇 Blocker E 時，必須指定 SoF、SoW 或 Both。'); return; }
+        const notesEl = document.getElementById('modal-blocker-notes');
+        notesEl.value = `[E: ${eType}]${notesEl.value.trim() ? ' ' + notesEl.value.trim() : ''}`;
+      }
+
+      currentCase.blockerCategories = blockerVals;
       currentCase.triggeredBy       = triggeredBy;
       currentCase.blockerNotes      = document.getElementById('modal-blocker-notes').value;
       currentCase.waitingRound      = (currentCase.waitingRound || 0) + 1;
@@ -616,6 +654,16 @@
     currentRole = role;
     document.getElementById('role-badge').textContent = roleLabel();
   }
+
+  // Show/hide G warning and E sub-selection as checkboxes change
+  document.addEventListener('change', function(e) {
+    if (!e.target.closest('#modal-blocker-checks')) return;
+    const checked = [...document.querySelectorAll('#modal-blocker-checks input:checked')].map(b => b.value);
+    document.getElementById('g-blocker-warning').style.display = checked.includes('G') ? '' : 'none';
+    const showE = checked.includes('E');
+    document.getElementById('e-type-section').style.display = showE ? '' : 'none';
+    if (!showE) document.querySelectorAll('input[name="e-sof-sow"]').forEach(r => r.checked = false);
+  });
 
   document.addEventListener('DOMContentLoaded', () => {
     const id = getQueryParam('id');
