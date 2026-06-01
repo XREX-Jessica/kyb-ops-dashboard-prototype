@@ -365,26 +365,21 @@
 
           <!-- ── Tab 3: Dashboard Metrics ── -->
           <div class="ref-content" id="ref-metrics">
-            <div style="max-width:700px">
-              <div style="background:#fafafa;border:1px solid #d9d9d9;border-radius:6px;padding:16px;margin-bottom:16px">
-                <div style="font-weight:600;font-size:13px;color:#262626;margin-bottom:8px">Aging</div>
-                <div style="font-size:12px;color:#595959;line-height:1.6;margin-bottom:8px">
-                  <strong>Definition:</strong> Number of days a case has remained in its current state.
-                </div>
-                <div style="font-size:12px;color:#595959;line-height:1.6">
-                  <strong>Purpose:</strong> Identify stalled cases and onboarding bottlenecks. Improve operational visibility.
-                </div>
-              </div>
-              <div style="background:#fafafa;border:1px solid #d9d9d9;border-radius:6px;padding:16px">
-                <div style="font-weight:600;font-size:13px;color:#262626;margin-bottom:8px">Onboarding Target</div>
-                <div style="font-size:12px;color:#595959;line-height:1.6;margin-bottom:8px">
-                  <strong>Business Objective:</strong> Complete KYB onboarding within 7 calendar days whenever possible.
-                </div>
-                <div style="font-size:12px;color:#8c8c8c;line-height:1.6;font-style:italic">
-                  Note: Aging measures time spent in the current state. The 7-day onboarding target measures the overall onboarding journey and is not currently used as a state-level SLA.
-                </div>
-              </div>
-            </div>
+            <table class="ref-table" style="max-width:700px">
+              <thead>
+                <tr><th style="width:180px">Metric</th><th>Definition</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Aging</strong></td>
+                  <td>Number of days a case has remained in its current state.</td>
+                </tr>
+                <tr>
+                  <td><strong>Onboarding Target</strong></td>
+                  <td>Complete KYB onboarding within 7 calendar days whenever possible.</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
 
         </div><!-- end ref-body -->
