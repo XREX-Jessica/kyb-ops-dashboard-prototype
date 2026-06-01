@@ -117,14 +117,13 @@
       <!-- ── Operational Reference ── -->
       <div class="ref-section">
         <div class="ref-toggle-bar" id="ref-toggle-bar" onclick="toggleRef()">
-          <span class="ref-toggle-label">📖 Operational Reference — shared definitions for Lifecycle States · Blocker Codes · Role Responsibilities</span>
+          <span class="ref-toggle-label">📖 Operational Reference — shared definitions for Lifecycle States · Blocker Codes</span>
           <span class="ref-toggle-caret" id="ref-caret">▼ Show</span>
         </div>
         <div id="ref-body" style="display:none">
           <div class="ref-tabs">
             <button class="ref-tab-btn active" onclick="showRefTab('states',this)">Lifecycle States</button>
             <button class="ref-tab-btn" onclick="showRefTab('blockers',this)">Blocker Codes</button>
-            <button class="ref-tab-btn" onclick="showRefTab('roles',this)">Role Responsibilities</button>
           </div>
 
           <!-- ── Tab 1: Lifecycle States ── -->
@@ -358,88 +357,6 @@
                   <div class="blocker-ref-def">The case is delayed due to internal operational or system-related issues.</div>
                   <div class="blocker-ref-label">Typical Examples</div>
                   <div class="blocker-ref-examples">Reviewer assignment pending · Internal handoff delay · System issue · Missing internal follow-up</div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- ── Tab 3: Role Responsibilities ── -->
-          <div class="ref-content" id="ref-roles">
-            <div class="role-cards">
-              <div class="role-card">
-                <div class="role-card-header rm">Selina Chang — RM</div>
-                <div class="role-card-body">
-                  <div class="role-section">
-                    <div class="role-section-title">Responsibilities</div>
-                    <ul>
-                      <li>Create KYB cases at point of customer registration</li>
-                      <li>Maintain customer relationship throughout the onboarding lifecycle</li>
-                      <li>Log every customer contact attempt with date and outcome</li>
-                      <li>Set and update Next Follow-up Date after each contact</li>
-                      <li>Tick Customer Responded immediately when customer submits documents</li>
-                      <li>Advance KYB Form Pending → KYB Submitted after confirming document submission</li>
-                      <li>Mark Abandoned when case is inactive for a defined period, customer explicitly withdraws, or RM confirms termination</li>
-                    </ul>
-                  </div>
-                  <div class="role-section dont">
-                    <div class="role-section-title">Does NOT</div>
-                    <ul>
-                      <li>Assess or review KYB documents — Arianna's scope</li>
-                      <li>Change state to KYB Review, Compliance Review, or EDD</li>
-                      <li>Remove the Customer Responded checkbox — reviewer's action</li>
-                      <li>Contact customer about compliance findings — SG Compliance directs this</li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-              <div class="role-card">
-                <div class="role-card-header kyb">Arianna — KYB Reviewer</div>
-                <div class="role-card-body">
-                  <div class="role-section">
-                    <div class="role-section-title">Responsibilities</div>
-                    <ul>
-                      <li>Pick up KYB Submitted cases within 1 business day</li>
-                      <li>Change state to KYB Review explicitly before starting review</li>
-                      <li>Identify ALL blockers in a single review cycle</li>
-                      <li>Log all blockers with specific notes before entering Waiting Customer</li>
-                      <li>Pick up from Returned from Customer queue within 4 business hours</li>
-                      <li>Clear the Customer Responded checkbox when picking up a returned case</li>
-                      <li>Advance to Compliance Review only when all KYB criteria are fully met</li>
-                    </ul>
-                  </div>
-                  <div class="role-section dont">
-                    <div class="role-section-title">Does NOT</div>
-                    <ul>
-                      <li>Contact customers directly — Selina's scope</li>
-                      <li>Make decisions on sanctions, PEP, or adverse media — escalate to SG Compliance</li>
-                      <li>Approve or reject cases</li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-              <div class="role-card">
-                <div class="role-card-header comp">SG Compliance</div>
-                <div class="role-card-body">
-                  <div class="role-section">
-                    <div class="role-section-title">Responsibilities</div>
-                    <ul>
-                      <li>Pick up Compliance Review cases within 1 business day</li>
-                      <li>Conduct PEP screening, sanctions screening, and adverse media review</li>
-                      <li>Assess source of funds and source of wealth as required</li>
-                      <li>Trigger Waiting Customer (Triggered By: Compliance) when additional documents are needed</li>
-                      <li>Trigger EDD when specific risk criteria are met</li>
-                      <li>Issue Approved or Rejected with findings documented in Activity Log before state change</li>
-                      <li>Manage EDD cases through to a final decision</li>
-                    </ul>
-                  </div>
-                  <div class="role-section dont">
-                    <div class="role-section-title">Does NOT</div>
-                    <ul>
-                      <li>Review KYB-layer documents — Arianna's scope</li>
-                      <li>Contact customers directly — Selina's scope</li>
-                      <li>Issue Approved or Rejected without a logged finding</li>
-                    </ul>
-                  </div>
                 </div>
               </div>
             </div>
