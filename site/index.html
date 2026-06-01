@@ -144,15 +144,15 @@
                 <tr>
                   <td><span class="tag tag-gray">KYB Form Pending</span></td>
                   <td>Customer has completed platform registration but has not submitted the KYB form.</td>
-                  <td>RM creates case at point of customer registration.</td>
-                  <td>Customer submits KYB form → RM advances to KYB Submitted.</td>
+                  <td>Customer successfully completes platform registration.</td>
+                  <td>Customer submits KYB form and initial documents → state advances to KYB Submitted.</td>
                   <td><span class="owner-chip owner-rm">Selina Chang</span></td>
                   <td><span class="tag tag-blue" style="font-size:10px">Active</span></td>
                 </tr>
                 <tr>
                   <td><span class="tag tag-blue">KYB Submitted</span></td>
                   <td>Customer has submitted the KYB form and initial documents, but review has not started yet.</td>
-                  <td>RM advances from KYB Form Pending after confirming document package is received.</td>
+                  <td>Customer submits KYB form and initial documents.</td>
                   <td>Arianna or Charlotte picks up → KYB Review.</td>
                   <td><span class="owner-chip owner-kyb">Arianna</span><span class="ref-alert" style="margin-top:4px;display:block">Pick up within 1 business day</span></td>
                   <td><span class="tag tag-blue" style="font-size:10px">Active</span></td>
@@ -169,7 +169,7 @@
                   <td><span class="tag tag-orange">Waiting Customer</span></td>
                   <td>Customer action required — document resubmission or additional clarification.</td>
                   <td>Reviewer transitions from KYB Review or Compliance Review. Triggered By and at least one Blocker Category required before transition.</td>
-                  <td>Customer submits → RM ticks Customer Responded → Reviewer picks up within 4 business hours.</td>
+                  <td>Customer submits documents → RM ticks Customer Responded → Reviewer picks up within 4 business hours → Return to previous review stage (KYB Review or Compliance Review).</td>
                   <td><span class="owner-chip owner-rm">Selina Chang</span><span class="ref-note" style="margin-top:4px;display:block">Reviewer owns pickup on response</span></td>
                   <td><span class="tag tag-blue" style="font-size:10px">Active</span></td>
                 </tr>
@@ -184,7 +184,7 @@
                 <tr>
                   <td><span class="tag tag-red">EDD</span></td>
                   <td>Enhanced due diligence required due to higher risk or complexity.</td>
-                  <td>SG Compliance triggers from Compliance Review only for: confirmed PEP, sanctions match, adverse media, or unexplained source of funds. Not triggered for document issues.</td>
+                  <td>SG Compliance triggers from Compliance Review. Examples include: confirmed PEP or sanctions match; adverse media linking principal to financial crime; UBO concerns unresolved after document requests; high-risk jurisdiction; complex or opaque ownership structure; unexplained source of funds or wealth; business legitimacy concerns; internal risk score threshold.</td>
                   <td>(a) Risk acceptable → Approved<br>(b) Risk unacceptable → Rejected</td>
                   <td><span class="owner-chip owner-compliance">SG Compliance</span></td>
                   <td><span class="tag tag-blue" style="font-size:10px">Active</span></td>
@@ -208,7 +208,7 @@
                 <tr>
                   <td><span class="tag tag-gray">Abandoned</span></td>
                   <td>Customer stopped progressing or did not respond for a defined period.</td>
-                  <td>RM marks Abandoned with an Abandoned Reason: after 3 unanswered attempts in 14 days, or on explicit customer withdrawal.</td>
+                  <td>Waiting Customer or KYB Form Pending inactive for a defined period; customer explicitly withdraws; or RM confirms termination with an Abandoned Reason.</td>
                   <td>Terminal. Customer may re-engage and require a new case.</td>
                   <td><span class="owner-chip owner-rm">Selina Chang</span></td>
                   <td><span class="tag tag-gray" style="font-size:10px">Closed</span></td>
