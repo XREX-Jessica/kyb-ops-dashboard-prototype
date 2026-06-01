@@ -117,13 +117,14 @@
       <!-- ── Operational Reference ── -->
       <div class="ref-section">
         <div class="ref-toggle-bar" id="ref-toggle-bar" onclick="toggleRef()">
-          <span class="ref-toggle-label">📖 Operational Reference — shared definitions for Lifecycle States · Blocker Codes</span>
+          <span class="ref-toggle-label">📖 Operational Reference — shared definitions for Lifecycle States · Blocker Codes · Dashboard Metrics</span>
           <span class="ref-toggle-caret" id="ref-caret">▼ Show</span>
         </div>
         <div id="ref-body" style="display:none">
           <div class="ref-tabs">
             <button class="ref-tab-btn active" onclick="showRefTab('states',this)">Lifecycle States</button>
             <button class="ref-tab-btn" onclick="showRefTab('blockers',this)">Blocker Codes</button>
+            <button class="ref-tab-btn" onclick="showRefTab('metrics',this)">Dashboard Metrics</button>
           </div>
 
           <!-- ── Tab 1: Lifecycle States ── -->
@@ -357,6 +358,30 @@
                   <div class="blocker-ref-def">The case is delayed due to internal operational or system-related issues.</div>
                   <div class="blocker-ref-label">Typical Examples</div>
                   <div class="blocker-ref-examples">Reviewer assignment pending · Internal handoff delay · System issue · Missing internal follow-up</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ── Tab 3: Dashboard Metrics ── -->
+          <div class="ref-content" id="ref-metrics" style="display:none">
+            <div style="max-width:700px">
+              <div style="background:#fafafa;border:1px solid #d9d9d9;border-radius:6px;padding:16px;margin-bottom:16px">
+                <div style="font-weight:600;font-size:13px;color:#262626;margin-bottom:8px">Aging</div>
+                <div style="font-size:12px;color:#595959;line-height:1.6;margin-bottom:8px">
+                  <strong>Definition:</strong> Number of days a case has remained in its current state.
+                </div>
+                <div style="font-size:12px;color:#595959;line-height:1.6">
+                  <strong>Purpose:</strong> Identify stalled cases and onboarding bottlenecks. Improve operational visibility.
+                </div>
+              </div>
+              <div style="background:#fafafa;border:1px solid #d9d9d9;border-radius:6px;padding:16px">
+                <div style="font-weight:600;font-size:13px;color:#262626;margin-bottom:8px">Onboarding Target</div>
+                <div style="font-size:12px;color:#595959;line-height:1.6;margin-bottom:8px">
+                  <strong>Business Objective:</strong> Complete KYB onboarding within 7 calendar days whenever possible.
+                </div>
+                <div style="font-size:12px;color:#8c8c8c;line-height:1.6;font-style:italic">
+                  Note: Aging measures time spent in the current state. The 7-day onboarding target measures the overall onboarding journey and is not currently used as a state-level SLA.
                 </div>
               </div>
             </div>
