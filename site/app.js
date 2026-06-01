@@ -1,5 +1,5 @@
 // ── Demo data ──
-const TODAY = '2026-05-29';
+const TODAY = '2026-06-01';
 
 function daysAgo(n) {
   const d = new Date(TODAY);
@@ -11,12 +11,6 @@ function agingFlag(days) {
   if (days < 3) return 'green';
   if (days <= 5) return 'yellow';
   return 'red';
-}
-
-function agingLabel(days) {
-  if (days < 3) return '🟢';
-  if (days <= 5) return '🟡';
-  return '🔴';
 }
 
 const STATE_COLORS = {
@@ -49,12 +43,12 @@ const CASES = [
     id: 'KYB-001',
     customerName: 'David Chen',
     companyName: 'Acme Trading Ltd',
-    rmOwner: 'Sarah Lin',
+    rmOwner: 'Selina Chang',
     registrationDate: daysAgo(19),
     currentState: 'KYB Review',
     stateEntryDate: daysAgo(6),
     previousState: 'KYB Submitted',
-    kybReviewer: 'James Wu',
+    kybReviewer: 'Ariana',
     complianceReviewer: null,
     triggeredBy: null,
     blockerCategories: [],
@@ -71,21 +65,21 @@ const CASES = [
     caseNotes: 'Large trading company with 4 UBOs. Requires comprehensive document review.',
     priorityFlag: true,
     activityLog: [
-      { ts: daysAgo(19) + ' 09:12', type: 'State Changed', color: 'blue', desc: 'State changed: Registration Pending → KYB Submitted by Sarah Lin', actor: 'Sarah Lin' },
-      { ts: daysAgo(6) + ' 10:30', type: 'State Changed', color: 'blue', desc: 'State changed: KYB Submitted → KYB Review by James Wu', actor: 'James Wu' },
-      { ts: daysAgo(6) + ' 14:05', type: 'Reviewer Note', color: 'gray', desc: 'UBO structure requires clarification on 3 beneficial owners. Reviewing corporate chain.', actor: 'James Wu' },
+      { ts: daysAgo(19) + ' 09:12', type: 'State Changed', color: 'blue', desc: 'State changed: Registration Pending → KYB Submitted by Selina Chang', actor: 'Selina Chang' },
+      { ts: daysAgo(6) + ' 10:30', type: 'State Changed', color: 'blue', desc: 'State changed: KYB Submitted → KYB Review by Ariana', actor: 'Ariana' },
+      { ts: daysAgo(6) + ' 14:05', type: 'Reviewer Note', color: 'gray', desc: 'UBO structure requires clarification on 3 beneficial owners. Reviewing corporate chain.', actor: 'Ariana' },
     ],
   },
   {
     id: 'KYB-002',
     customerName: 'Mei Lin',
     companyName: 'Bright Future Corp',
-    rmOwner: 'Mike Tan',
+    rmOwner: 'Selina Chang',
     registrationDate: daysAgo(22),
     currentState: 'Waiting Customer',
     stateEntryDate: daysAgo(9),
     previousState: 'KYB Review',
-    kybReviewer: 'James Wu',
+    kybReviewer: 'Ariana',
     complianceReviewer: null,
     triggeredBy: 'KYB',
     blockerCategories: ['A', 'B'],
@@ -95,35 +89,35 @@ const CASES = [
     waitingRound: 2,
     lastCustomerContact: daysAgo(3),
     contactAttempts: 3,
-    nextFollowupDate: TODAY,
+    nextFollowupDate: daysAgo(3),
     kybSubmissionDate: daysAgo(18),
     complianceStartDate: null,
     decisionDate: null,
     caseNotes: 'Second waiting round. Customer has been slow to respond.',
     priorityFlag: false,
     activityLog: [
-      { ts: daysAgo(22) + ' 11:00', type: 'State Changed', color: 'blue', desc: 'State changed: Registration Pending → KYB Submitted by Mike Tan', actor: 'Mike Tan' },
-      { ts: daysAgo(18) + ' 09:45', type: 'State Changed', color: 'blue', desc: 'State changed: KYB Submitted → KYB Review by James Wu', actor: 'James Wu' },
-      { ts: daysAgo(13) + ' 15:30', type: 'State Changed', color: 'orange', desc: 'State changed: KYB Review → Waiting Customer (Round 1) — Blockers: A, B', actor: 'James Wu' },
-      { ts: daysAgo(11) + ' 10:00', type: 'Customer Contacted', color: 'gray', desc: 'Customer contact attempt 1. Left voicemail and sent follow-up email.', actor: 'Mike Tan' },
-      { ts: daysAgo(9) + ' 14:15', type: 'Customer Responded', color: 'green', desc: 'Customer responded — documents received. Reviewer picked up.', actor: 'Mike Tan' },
-      { ts: daysAgo(9) + ' 15:00', type: 'State Changed', color: 'blue', desc: 'State changed: Waiting Customer → KYB Review by James Wu', actor: 'James Wu' },
-      { ts: daysAgo(9) + ' 15:30', type: 'Document Request Sent', color: 'orange', desc: 'Documents reviewed. Bank statement still invalid (screenshot). Returning to Waiting Customer (Round 2).', actor: 'James Wu' },
-      { ts: daysAgo(9) + ' 15:35', type: 'State Changed', color: 'orange', desc: 'State changed: KYB Review → Waiting Customer (Round 2) — Blockers: A, B', actor: 'James Wu' },
-      { ts: daysAgo(3) + ' 09:00', type: 'Customer Contacted', color: 'gray', desc: 'Customer contact attempt 3. Sent reminder with specific document checklist.', actor: 'Mike Tan' },
+      { ts: daysAgo(22) + ' 11:00', type: 'State Changed', color: 'blue', desc: 'State changed: Registration Pending → KYB Submitted by Selina Chang', actor: 'Selina Chang' },
+      { ts: daysAgo(18) + ' 09:45', type: 'State Changed', color: 'blue', desc: 'State changed: KYB Submitted → KYB Review by Ariana', actor: 'Ariana' },
+      { ts: daysAgo(13) + ' 15:30', type: 'State Changed', color: 'orange', desc: 'State changed: KYB Review → Waiting Customer (Round 1) — Blockers: A, B', actor: 'Ariana' },
+      { ts: daysAgo(11) + ' 10:00', type: 'Customer Contacted', color: 'gray', desc: 'Customer contact attempt 1. Left voicemail and sent follow-up email.', actor: 'Selina Chang' },
+      { ts: daysAgo(9) + ' 14:15', type: 'Customer Responded', color: 'green', desc: 'Customer responded — documents received. Reviewer picked up.', actor: 'Selina Chang' },
+      { ts: daysAgo(9) + ' 15:00', type: 'State Changed', color: 'blue', desc: 'State changed: Waiting Customer → KYB Review by Ariana', actor: 'Ariana' },
+      { ts: daysAgo(9) + ' 15:30', type: 'Document Request Sent', color: 'orange', desc: 'Documents reviewed. Bank statement still invalid (screenshot). Returning to Waiting Customer (Round 2).', actor: 'Ariana' },
+      { ts: daysAgo(9) + ' 15:35', type: 'State Changed', color: 'orange', desc: 'State changed: KYB Review → Waiting Customer (Round 2) — Blockers: A, B', actor: 'Ariana' },
+      { ts: daysAgo(3) + ' 09:00', type: 'Customer Contacted', color: 'gray', desc: 'Customer contact attempt 3. Sent reminder with specific document checklist.', actor: 'Selina Chang' },
     ],
   },
   {
     id: 'KYB-003',
     customerName: 'Anna Ng',
     companyName: 'Global Ventures HK',
-    rmOwner: 'Sarah Lin',
+    rmOwner: 'Selina Chang',
     registrationDate: daysAgo(14),
     currentState: 'Compliance Review',
     stateEntryDate: daysAgo(2),
     previousState: 'KYB Review',
-    kybReviewer: 'James Wu',
-    complianceReviewer: 'Charlotte Lee',
+    kybReviewer: 'Ariana',
+    complianceReviewer: 'SG Compliance',
     triggeredBy: null,
     blockerCategories: [],
     blockerNotes: '',
@@ -139,17 +133,17 @@ const CASES = [
     caseNotes: 'Clean file so far. HK-registered entity, PEP screening pending.',
     priorityFlag: false,
     activityLog: [
-      { ts: daysAgo(14) + ' 08:30', type: 'State Changed', color: 'blue', desc: 'State changed: Registration Pending → KYB Submitted by Sarah Lin', actor: 'Sarah Lin' },
-      { ts: daysAgo(12) + ' 10:00', type: 'State Changed', color: 'blue', desc: 'State changed: KYB Submitted → KYB Review by James Wu', actor: 'James Wu' },
-      { ts: daysAgo(2) + ' 11:20', type: 'State Changed', color: 'purple', desc: 'State changed: KYB Review → Compliance Review by James Wu', actor: 'James Wu' },
-      { ts: daysAgo(2) + ' 11:25', type: 'Reviewer Note', color: 'gray', desc: 'KYB complete. Escalating to Compliance for PEP screening and source of funds verification.', actor: 'James Wu' },
+      { ts: daysAgo(14) + ' 08:30', type: 'State Changed', color: 'blue', desc: 'State changed: Registration Pending → KYB Submitted by Selina Chang', actor: 'Selina Chang' },
+      { ts: daysAgo(12) + ' 10:00', type: 'State Changed', color: 'blue', desc: 'State changed: KYB Submitted → KYB Review by Ariana', actor: 'Ariana' },
+      { ts: daysAgo(2) + ' 11:20', type: 'State Changed', color: 'purple', desc: 'State changed: KYB Review → Compliance Review by Ariana', actor: 'Ariana' },
+      { ts: daysAgo(2) + ' 11:25', type: 'Reviewer Note', color: 'gray', desc: 'KYB complete. Escalating to Compliance for PEP screening and source of funds verification.', actor: 'Ariana' },
     ],
   },
   {
     id: 'KYB-004',
     customerName: 'Robert Ho',
     companyName: 'SunTech Solutions',
-    rmOwner: 'Tom Chang',
+    rmOwner: 'Selina Chang',
     registrationDate: daysAgo(8),
     currentState: 'KYB Submitted',
     stateEntryDate: daysAgo(4),
@@ -171,54 +165,54 @@ const CASES = [
     caseNotes: 'Tech startup. Documents appear complete at submission.',
     priorityFlag: false,
     activityLog: [
-      { ts: daysAgo(8) + ' 14:00', type: 'State Changed', color: 'blue', desc: 'State changed: Registration Pending → KYB Submitted by Tom Chang', actor: 'Tom Chang' },
+      { ts: daysAgo(8) + ' 14:00', type: 'State Changed', color: 'blue', desc: 'State changed: Registration Pending → KYB Submitted by Selina Chang', actor: 'Selina Chang' },
     ],
   },
   {
     id: 'KYB-005',
     customerName: 'Linda Koo',
     companyName: 'Pacific Import Co',
-    rmOwner: 'Mike Tan',
+    rmOwner: 'Selina Chang',
     registrationDate: daysAgo(18),
     currentState: 'Waiting Customer',
     stateEntryDate: daysAgo(3),
     previousState: 'Compliance Review',
-    kybReviewer: 'James Wu',
-    complianceReviewer: 'Charlotte Lee',
+    kybReviewer: 'Ariana',
+    complianceReviewer: 'SG Compliance',
     triggeredBy: 'Compliance',
     blockerCategories: ['D', 'E'],
     blockerNotes: 'UBO declaration form incomplete. Source of wealth documentation insufficient for transaction volume.',
     customerResponded: true,
-    responseDate: TODAY,
+    responseDate: daysAgo(1),
     waitingRound: 1,
-    lastCustomerContact: daysAgo(1),
+    lastCustomerContact: daysAgo(2),
     contactAttempts: 2,
-    nextFollowupDate: TODAY,
+    nextFollowupDate: daysAgo(1),
     kybSubmissionDate: daysAgo(16),
     complianceStartDate: daysAgo(7),
     decisionDate: null,
     caseNotes: 'Import business with complex ownership. Compliance flagged UBO and source of funds.',
     priorityFlag: true,
     activityLog: [
-      { ts: daysAgo(18) + ' 10:00', type: 'State Changed', color: 'blue', desc: 'State changed: Registration Pending → KYB Submitted by Mike Tan', actor: 'Mike Tan' },
-      { ts: daysAgo(16) + ' 09:30', type: 'State Changed', color: 'blue', desc: 'State changed: KYB Submitted → KYB Review by James Wu', actor: 'James Wu' },
-      { ts: daysAgo(9) + ' 16:00', type: 'State Changed', color: 'purple', desc: 'State changed: KYB Review → Compliance Review by James Wu', actor: 'James Wu' },
-      { ts: daysAgo(3) + ' 14:00', type: 'State Changed', color: 'orange', desc: 'State changed: Compliance Review → Waiting Customer (Round 1) — Blockers: D, E', actor: 'Charlotte Lee' },
-      { ts: daysAgo(1) + ' 11:00', type: 'Customer Contacted', color: 'gray', desc: 'Customer contact attempt 2. Customer confirmed documents are being prepared.', actor: 'Mike Tan' },
-      { ts: TODAY + ' 09:15', type: 'Customer Responded', color: 'green', desc: 'Customer responded — new documents submitted. Awaiting reviewer pickup.', actor: 'Mike Tan' },
+      { ts: daysAgo(18) + ' 10:00', type: 'State Changed', color: 'blue', desc: 'State changed: Registration Pending → KYB Submitted by Selina Chang', actor: 'Selina Chang' },
+      { ts: daysAgo(16) + ' 09:30', type: 'State Changed', color: 'blue', desc: 'State changed: KYB Submitted → KYB Review by Ariana', actor: 'Ariana' },
+      { ts: daysAgo(9) + ' 16:00', type: 'State Changed', color: 'purple', desc: 'State changed: KYB Review → Compliance Review by Ariana', actor: 'Ariana' },
+      { ts: daysAgo(3) + ' 14:00', type: 'State Changed', color: 'orange', desc: 'State changed: Compliance Review → Waiting Customer (Round 1) — Blockers: D, E', actor: 'SG Compliance' },
+      { ts: daysAgo(2) + ' 11:00', type: 'Customer Contacted', color: 'gray', desc: 'Customer contact attempt 2. Customer confirmed documents are being prepared.', actor: 'Selina Chang' },
+      { ts: daysAgo(1) + ' 09:15', type: 'Customer Responded', color: 'green', desc: 'Customer responded — new documents submitted. Awaiting SG Compliance pickup.', actor: 'Selina Chang' },
     ],
   },
   {
     id: 'KYB-006',
     customerName: 'James Lau',
     companyName: 'Meridian Finance',
-    rmOwner: 'Tom Chang',
+    rmOwner: 'Selina Chang',
     registrationDate: daysAgo(28),
     currentState: 'EDD',
     stateEntryDate: daysAgo(7),
     previousState: 'Compliance Review',
-    kybReviewer: 'James Wu',
-    complianceReviewer: 'Charlotte Lee',
+    kybReviewer: 'Ariana',
+    complianceReviewer: 'SG Compliance',
     triggeredBy: null,
     blockerCategories: ['G'],
     blockerNotes: 'Adverse media findings. PEP connection identified. EDD in progress.',
@@ -234,18 +228,18 @@ const CASES = [
     caseNotes: 'Escalated to EDD due to adverse media and potential PEP connection. Compliance team conducting enhanced review.',
     priorityFlag: true,
     activityLog: [
-      { ts: daysAgo(28) + ' 09:00', type: 'State Changed', color: 'blue', desc: 'State changed: Registration Pending → KYB Submitted by Tom Chang', actor: 'Tom Chang' },
-      { ts: daysAgo(25) + ' 10:00', type: 'State Changed', color: 'blue', desc: 'State changed: KYB Submitted → KYB Review by James Wu', actor: 'James Wu' },
-      { ts: daysAgo(14) + ' 15:30', type: 'State Changed', color: 'purple', desc: 'State changed: KYB Review → Compliance Review by James Wu', actor: 'James Wu' },
-      { ts: daysAgo(7) + ' 11:00', type: 'Escalation Flagged', color: 'red', desc: 'EDD triggered. Adverse media: director appears in news linked to regulatory action in SG. PEP screening returned potential match.', actor: 'Charlotte Lee' },
-      { ts: daysAgo(7) + ' 11:05', type: 'State Changed', color: 'red', desc: 'State changed: Compliance Review → EDD by Charlotte Lee', actor: 'Charlotte Lee' },
+      { ts: daysAgo(28) + ' 09:00', type: 'State Changed', color: 'blue', desc: 'State changed: Registration Pending → KYB Submitted by Selina Chang', actor: 'Selina Chang' },
+      { ts: daysAgo(25) + ' 10:00', type: 'State Changed', color: 'blue', desc: 'State changed: KYB Submitted → KYB Review by Ariana', actor: 'Ariana' },
+      { ts: daysAgo(14) + ' 15:30', type: 'State Changed', color: 'purple', desc: 'State changed: KYB Review → Compliance Review by Ariana', actor: 'Ariana' },
+      { ts: daysAgo(7) + ' 11:00', type: 'Escalation Flagged', color: 'red', desc: 'EDD triggered. Adverse media: director appears in news linked to regulatory action in SG. PEP screening returned potential match.', actor: 'SG Compliance' },
+      { ts: daysAgo(7) + ' 11:05', type: 'State Changed', color: 'red', desc: 'State changed: Compliance Review → EDD by SG Compliance', actor: 'SG Compliance' },
     ],
   },
   {
     id: 'KYB-007',
     customerName: 'Sophie Wang',
     companyName: 'Stellar Logistics',
-    rmOwner: 'Sarah Lin',
+    rmOwner: 'Selina Chang',
     registrationDate: daysAgo(1),
     currentState: 'Registration Pending',
     stateEntryDate: daysAgo(1),
@@ -267,19 +261,19 @@ const CASES = [
     caseNotes: 'New registration. Awaiting customer to complete and submit KYB documents.',
     priorityFlag: false,
     activityLog: [
-      { ts: daysAgo(1) + ' 16:30', type: 'State Changed', color: 'blue', desc: 'State changed: → Registration Pending. Case created by Sarah Lin.', actor: 'Sarah Lin' },
+      { ts: daysAgo(1) + ' 16:30', type: 'State Changed', color: 'blue', desc: 'State changed: → Registration Pending. Case created by Selina Chang.', actor: 'Selina Chang' },
     ],
   },
   {
     id: 'KYB-008',
     customerName: 'Frank Liu',
     companyName: 'Harbor Trade Ltd',
-    rmOwner: 'Mike Tan',
+    rmOwner: 'Selina Chang',
     registrationDate: daysAgo(16),
     currentState: 'KYB Review',
     stateEntryDate: daysAgo(5),
     previousState: 'KYB Submitted',
-    kybReviewer: 'James Wu',
+    kybReviewer: 'Ariana',
     complianceReviewer: null,
     triggeredBy: null,
     blockerCategories: [],
@@ -296,20 +290,20 @@ const CASES = [
     caseNotes: 'Mid-size trading company. Review in progress.',
     priorityFlag: true,
     activityLog: [
-      { ts: daysAgo(16) + ' 10:00', type: 'State Changed', color: 'blue', desc: 'State changed: Registration Pending → KYB Submitted by Mike Tan', actor: 'Mike Tan' },
-      { ts: daysAgo(5) + ' 09:20', type: 'State Changed', color: 'blue', desc: 'State changed: KYB Submitted → KYB Review by James Wu', actor: 'James Wu' },
+      { ts: daysAgo(16) + ' 10:00', type: 'State Changed', color: 'blue', desc: 'State changed: Registration Pending → KYB Submitted by Selina Chang', actor: 'Selina Chang' },
+      { ts: daysAgo(5) + ' 09:20', type: 'State Changed', color: 'blue', desc: 'State changed: KYB Submitted → KYB Review by Ariana', actor: 'Ariana' },
     ],
   },
   {
     id: 'KYB-009',
     customerName: 'Nancy Yip',
     companyName: 'Delta Commerce',
-    rmOwner: 'Tom Chang',
+    rmOwner: 'Selina Chang',
     registrationDate: daysAgo(10),
     currentState: 'Waiting Customer',
     stateEntryDate: daysAgo(2),
     previousState: 'KYB Review',
-    kybReviewer: 'James Wu',
+    kybReviewer: 'Ariana',
     complianceReviewer: null,
     triggeredBy: 'KYB',
     blockerCategories: ['C'],
@@ -319,30 +313,30 @@ const CASES = [
     waitingRound: 1,
     lastCustomerContact: daysAgo(2),
     contactAttempts: 1,
-    nextFollowupDate: daysAgo(-2),
+    nextFollowupDate: daysAgo(1),
     kybSubmissionDate: daysAgo(8),
     complianceStartDate: null,
     decisionDate: null,
     caseNotes: 'Translation blocker. Client has engaged a translation service.',
     priorityFlag: false,
     activityLog: [
-      { ts: daysAgo(10) + ' 11:30', type: 'State Changed', color: 'blue', desc: 'State changed: Registration Pending → KYB Submitted by Tom Chang', actor: 'Tom Chang' },
-      { ts: daysAgo(8) + ' 09:00', type: 'State Changed', color: 'blue', desc: 'State changed: KYB Submitted → KYB Review by James Wu', actor: 'James Wu' },
-      { ts: daysAgo(2) + ' 16:00', type: 'State Changed', color: 'orange', desc: 'State changed: KYB Review → Waiting Customer (Round 1) — Blockers: C', actor: 'James Wu' },
-      { ts: daysAgo(2) + ' 16:05', type: 'Customer Contacted', color: 'gray', desc: 'Customer contact attempt 1. Informed client of translation requirement.', actor: 'Tom Chang' },
+      { ts: daysAgo(10) + ' 11:30', type: 'State Changed', color: 'blue', desc: 'State changed: Registration Pending → KYB Submitted by Selina Chang', actor: 'Selina Chang' },
+      { ts: daysAgo(8) + ' 09:00', type: 'State Changed', color: 'blue', desc: 'State changed: KYB Submitted → KYB Review by Ariana', actor: 'Ariana' },
+      { ts: daysAgo(2) + ' 16:00', type: 'State Changed', color: 'orange', desc: 'State changed: KYB Review → Waiting Customer (Round 1) — Blockers: C', actor: 'Ariana' },
+      { ts: daysAgo(2) + ' 16:05', type: 'Customer Contacted', color: 'gray', desc: 'Customer contact attempt 1. Informed client of translation requirement.', actor: 'Selina Chang' },
     ],
   },
   {
     id: 'KYB-010',
     customerName: 'Henry Pang',
     companyName: 'Nexus Capital',
-    rmOwner: 'Sarah Lin',
+    rmOwner: 'Selina Chang',
     registrationDate: daysAgo(35),
     currentState: 'Approved',
     stateEntryDate: daysAgo(9),
     previousState: 'Compliance Review',
-    kybReviewer: 'James Wu',
-    complianceReviewer: 'Charlotte Lee',
+    kybReviewer: 'Ariana',
+    complianceReviewer: 'SG Compliance',
     triggeredBy: null,
     blockerCategories: [],
     blockerNotes: '',
@@ -358,12 +352,12 @@ const CASES = [
     caseNotes: 'Approved after clean compliance review.',
     priorityFlag: false,
     activityLog: [
-      { ts: daysAgo(35) + ' 09:00', type: 'State Changed', color: 'blue', desc: 'State changed: Registration Pending → KYB Submitted by Sarah Lin', actor: 'Sarah Lin' },
-      { ts: daysAgo(32) + ' 10:00', type: 'State Changed', color: 'blue', desc: 'State changed: KYB Submitted → KYB Review by James Wu', actor: 'James Wu' },
-      { ts: daysAgo(25) + ' 14:00', type: 'State Changed', color: 'orange', desc: 'State changed: KYB Review → Waiting Customer (Round 1) — Blockers: B', actor: 'James Wu' },
-      { ts: daysAgo(20) + ' 11:00', type: 'Customer Responded', color: 'green', desc: 'Customer responded — complete documents received.', actor: 'Sarah Lin' },
-      { ts: daysAgo(18) + ' 09:30', type: 'State Changed', color: 'purple', desc: 'State changed: Waiting Customer → Compliance Review by James Wu', actor: 'James Wu' },
-      { ts: daysAgo(9) + ' 16:00', type: 'State Changed', color: 'green', desc: 'State changed: Compliance Review → Approved by Charlotte Lee', actor: 'Charlotte Lee' },
+      { ts: daysAgo(35) + ' 09:00', type: 'State Changed', color: 'blue', desc: 'State changed: Registration Pending → KYB Submitted by Selina Chang', actor: 'Selina Chang' },
+      { ts: daysAgo(32) + ' 10:00', type: 'State Changed', color: 'blue', desc: 'State changed: KYB Submitted → KYB Review by Ariana', actor: 'Ariana' },
+      { ts: daysAgo(25) + ' 14:00', type: 'State Changed', color: 'orange', desc: 'State changed: KYB Review → Waiting Customer (Round 1) — Blockers: B', actor: 'Ariana' },
+      { ts: daysAgo(20) + ' 11:00', type: 'Customer Responded', color: 'green', desc: 'Customer responded — complete documents received.', actor: 'Selina Chang' },
+      { ts: daysAgo(18) + ' 09:30', type: 'State Changed', color: 'purple', desc: 'State changed: Waiting Customer → Compliance Review by Ariana', actor: 'Ariana' },
+      { ts: daysAgo(9) + ' 16:00', type: 'State Changed', color: 'green', desc: 'State changed: Compliance Review → Approved by SG Compliance', actor: 'SG Compliance' },
     ],
   },
 ];
@@ -390,52 +384,157 @@ function agingHtml(stateEntryDate) {
   return `<span class="aging-dot ${flag}">${labels[flag]} ${days}d</span>`;
 }
 
-function blockerTagsHtml(cats) {
-  if (!cats || cats.length === 0) return '<span class="tag tag-gray">—</span>';
-  return cats.map(c => `<span class="blocker-tag">${c}: ${BLOCKER_CODES[c]}</span>`).join(' ');
+// ── Operational decision functions ──
+
+// Who must act right now to move this case forward?
+function getCurrentOwner(c) {
+  if (c.customerResponded) {
+    // Customer responded — reviewer must pick up
+    return c.triggeredBy === 'Compliance'
+      ? (c.complianceReviewer || null)
+      : (c.kybReviewer || null);
+  }
+  switch (c.currentState) {
+    case 'Registration Pending': return c.rmOwner;
+    case 'KYB Submitted':       return c.kybReviewer || null;
+    case 'KYB Review':          return c.kybReviewer || null;
+    case 'Waiting Customer':    return c.rmOwner;
+    case 'Compliance Review':   return c.complianceReviewer || null;
+    case 'EDD':                 return c.complianceReviewer || null;
+    default: return null;
+  }
 }
 
-// ── Role-based view filtering ──
+// What is the single next action for this case?
+// Returns { label, urgency: 'urgent'|'warning'|'active'|'waiting'|'passive' }
+function getNextAction(c) {
+  if (TERMINAL_STATES.includes(c.currentState)) {
+    return { label: 'Closed', urgency: 'passive' };
+  }
+  if (c.customerResponded) {
+    return { label: '⚡ Pick up — customer responded', urgency: 'urgent' };
+  }
+  switch (c.currentState) {
+    case 'Registration Pending':
+      return { label: 'Awaiting KYB submission', urgency: 'passive' };
+    case 'KYB Submitted':
+      if (!c.kybReviewer) return { label: '⚠ Assign KYB reviewer', urgency: 'warning' };
+      return { label: 'Pick up for review', urgency: 'active' };
+    case 'KYB Review':
+      return { label: 'Complete KYB review', urgency: 'active' };
+    case 'Waiting Customer': {
+      if (!c.nextFollowupDate) return { label: 'Follow up with customer', urgency: 'waiting' };
+      if (c.nextFollowupDate < TODAY) return { label: '⚠ Follow-up overdue', urgency: 'warning' };
+      if (c.nextFollowupDate === TODAY) return { label: 'Follow up today', urgency: 'waiting' };
+      return { label: 'Follow up with customer', urgency: 'passive' };
+    }
+    case 'Compliance Review':
+      return { label: 'Complete compliance review', urgency: 'active' };
+    case 'EDD':
+      return { label: 'EDD assessment', urgency: 'active' };
+    default:
+      return { label: '—', urgency: 'passive' };
+  }
+}
+
+// ── Default sort: overdue first, then days desc ──
+function defaultSort(a, b) {
+  const af = agingFlag(getDaysInState(a.stateEntryDate));
+  const bf = agingFlag(getDaysInState(b.stateEntryDate));
+  const order = { red: 0, yellow: 1, green: 2 };
+  if (order[af] !== order[bf]) return order[af] - order[bf];
+  return getDaysInState(b.stateEntryDate) - getDaysInState(a.stateEntryDate);
+}
+
+// ── Role-based view config ──
 const VIEW_CONFIG = {
+  // All operators: pipeline-wide view. Columns answer: who owns it, what's the next action?
   all: {
     label: 'All Cases',
     filter: (c, role) => role === 'ops' || role === 'kyb' || role === 'compliance' ? true : c.rmOwner === currentRmName(),
-    columns: ['id', 'company', 'state', 'rm', 'reviewer', 'aging', 'blocker', 'priority'],
+    columns: ['id', 'company', 'state', 'currentOwner', 'aging', 'blockerFull', 'nextAction'],
+    sort: defaultSort,
   },
+
+  // Selina: which of my customers do I need to contact today?
+  // Sort: overdue follow-up first, then by days waiting desc
   my_pipeline: {
-    label: 'My Pipeline (RM)',
-    filter: (c) => c.rmOwner === currentRmName() && !TERMINAL_STATES.includes(c.currentState),
-    columns: ['id', 'company', 'state', 'aging', 'blocker', 'lastContact', 'nextFollowup'],
+    label: 'My Pipeline — Selina Chang',
+    filter: (c) => c.rmOwner === 'Selina Chang' && !TERMINAL_STATES.includes(c.currentState),
+    columns: ['id', 'company', 'state', 'aging', 'blockerFull', 'lastContact', 'nextFollowup', 'nextAction'],
+    sort: (a, b) => {
+      const urgencyOrder = { warning: 0, urgent: 1, waiting: 2, active: 3, passive: 4 };
+      const ua = urgencyOrder[getNextAction(a).urgency] ?? 5;
+      const ub = urgencyOrder[getNextAction(b).urgency] ?? 5;
+      if (ua !== ub) return ua - ub;
+      return defaultSort(a, b);
+    },
   },
+
+  // Selina: all waiting customer cases — what was requested, how long, who needs to follow up?
+  // Sort: overdue follow-up first, then days waiting desc
   waiting_customer: {
     label: 'Waiting Customer',
     filter: (c) => c.currentState === 'Waiting Customer',
-    columns: ['id', 'company', 'rm', 'triggeredBy', 'blockerCats', 'aging', 'contactAttempts', 'nextFollowup', 'responded'],
+    columns: ['id', 'company', 'triggeredBy', 'blockerFull', 'aging', 'lastContact', 'contactAttempts', 'nextFollowup', 'responded', 'nextAction'],
+    sort: (a, b) => {
+      // Customer responded (handled but still shown) floats down
+      if (a.customerResponded !== b.customerResponded) return a.customerResponded ? 1 : -1;
+      // Overdue follow-up first
+      const aOver = a.nextFollowupDate && a.nextFollowupDate < TODAY;
+      const bOver = b.nextFollowupDate && b.nextFollowupDate < TODAY;
+      if (aOver !== bOver) return aOver ? -1 : 1;
+      return getDaysInState(b.stateEntryDate) - getDaysInState(a.stateEntryDate);
+    },
   },
+
+  // Reviewer pickup queue: cases where customer responded. 4-hour SLA.
+  // Sort: earliest response first (been waiting longest for pickup)
   returned: {
     label: '⚡ Returned from Customer',
     filter: (c) => c.customerResponded === true,
-    columns: ['id', 'company', 'rm', 'triggeredBy', 'responseDate', 'blockerCats', 'kybReviewer', 'complianceReviewer', 'aging'],
+    columns: ['id', 'company', 'currentOwner', 'triggeredBy', 'responseDate', 'aging', 'blockerFull', 'nextAction'],
+    sort: (a, b) => new Date(a.responseDate) - new Date(b.responseDate),
   },
+
+  // Ariana: which cases to review first?
+  // Sort: returned from customer first (highest urgency), then aging
   kyb_queue: {
-    label: 'KYB Review Queue',
+    label: 'KYB Review Queue — Ariana',
     filter: (c) => c.currentState === 'KYB Submitted' || c.currentState === 'KYB Review',
-    columns: ['id', 'company', 'state', 'kybReviewer', 'aging', 'kybSubmissionDate', 'blockerCats', 'waitingRound'],
+    columns: ['id', 'company', 'state', 'aging', 'kybSubmissionDate', 'waitingRound', 'blockerFull', 'nextAction'],
+    sort: (a, b) => {
+      if (a.customerResponded !== b.customerResponded) return a.customerResponded ? -1 : 1;
+      return defaultSort(a, b);
+    },
   },
+
+  // SG Compliance: which compliance cases to pick up?
+  // Sort: returned from customer first, then aging
   compliance_queue: {
-    label: 'Compliance Review Queue',
+    label: 'Compliance Review Queue — SG Compliance',
     filter: (c) => c.currentState === 'Compliance Review' || c.currentState === 'EDD',
-    columns: ['id', 'company', 'state', 'complianceReviewer', 'aging', 'complianceStartDate', 'blockerCats', 'triggeredBy'],
+    columns: ['id', 'company', 'state', 'aging', 'complianceStartDate', 'triggeredBy', 'blockerFull', 'nextAction'],
+    sort: (a, b) => {
+      if (a.customerResponded !== b.customerResponded) return a.customerResponded ? -1 : 1;
+      return defaultSort(a, b);
+    },
   },
+
+  // Winston + Ops PM: all overdue cases, who owns the delay?
   aging_queue: {
     label: 'Aging / Overdue',
     filter: (c) => agingFlag(getDaysInState(c.stateEntryDate)) === 'red' && !TERMINAL_STATES.includes(c.currentState),
-    columns: ['id', 'company', 'state', 'rm', 'reviewer', 'aging', 'blockerCats', 'lastContact', 'contactAttempts'],
+    columns: ['id', 'company', 'state', 'currentOwner', 'aging', 'blockerFull', 'nextAction'],
+    sort: (a, b) => getDaysInState(b.stateEntryDate) - getDaysInState(a.stateEntryDate),
   },
+
+  // Winston: bottleneck detection view — stage breakdown + full pipeline
   mgmt: {
     label: 'Management Overview',
     filter: (c) => !TERMINAL_STATES.includes(c.currentState),
-    columns: ['id', 'company', 'state', 'rm', 'reviewer', 'aging', 'registrationDate', 'totalDays', 'blockerCats'],
+    columns: ['id', 'company', 'state', 'currentOwner', 'aging', 'totalDays', 'blockerFull', 'nextAction'],
+    sort: defaultSort,
   },
 };
 
@@ -446,113 +545,237 @@ let searchText = '';
 let stateFilter = '';
 
 function currentRmName() {
-  const map = { rm_sarah: 'Sarah Lin', rm_mike: 'Mike Tan', rm_tom: 'Tom Chang' };
-  return map[currentRole] || '';
+  return currentRole === 'rm_selina' ? 'Selina Chang' : '';
 }
 
 function roleLabel() {
-  const map = { ops: 'Ops PM', kyb: 'KYB Reviewer', compliance: 'Compliance', rm_sarah: 'RM — Sarah Lin', rm_mike: 'RM — Mike Tan', rm_tom: 'RM — Tom Chang' };
+  const map = {
+    ops: 'Ops PM (Winston)',
+    kyb: 'KYB Reviewer (Ariana)',
+    compliance: 'Compliance (SG Compliance)',
+    rm_selina: 'RM — Selina Chang',
+  };
   return map[currentRole] || currentRole;
 }
 
 // ── Column renderers ──
 function renderCell(col, c) {
-  const days = getDaysInState(c.stateEntryDate);
   switch (col) {
-    case 'id': return `<a href="case-detail.html?id=${c.id}" style="color:#1677ff;font-weight:600">${c.id}</a>${c.priorityFlag ? ' <span class="priority-flag" title="Priority">⚑</span>' : ''}`;
-    case 'company': return `<strong>${c.companyName}</strong><div style="font-size:11px;color:#8c8c8c">${c.customerName}</div>`;
-    case 'state': return `<span class="${stateTagClass(c.currentState)}">${c.currentState}</span>`;
+    case 'id':
+      return `<a href="case-detail.html?id=${c.id}" style="color:#1677ff;font-weight:600">${c.id}</a>${c.priorityFlag ? ' <span class="priority-flag" title="Priority">⚑</span>' : ''}`;
+
+    case 'company':
+      // Customer name removed from main table — company name is the operational identifier
+      return `<strong>${c.companyName}</strong>`;
+
+    case 'state':
+      return `<span class="${stateTagClass(c.currentState)}">${c.currentState}</span>`;
+
+    // Who must act right now — replaces generic "RM Owner" + "Reviewer" columns
+    case 'currentOwner': {
+      const owner = getCurrentOwner(c);
+      if (!owner) return '<span class="owner-chip owner-unassigned">⚠ Unassigned</span>';
+      const isRM = owner === c.rmOwner;
+      const isCompliance = c.complianceReviewer && owner === c.complianceReviewer;
+      const cls = isRM ? 'owner-rm' : isCompliance ? 'owner-compliance' : 'owner-kyb';
+      return `<span class="owner-chip ${cls}">${owner}</span>`;
+    }
+
+    case 'aging':
+      return agingHtml(c.stateEntryDate);
+
+    // Full blocker label — replaces abstract code letters
+    case 'blockerFull': {
+      if (!c.blockerCategories || c.blockerCategories.length === 0) return '<span style="color:#d9d9d9">—</span>';
+      return c.blockerCategories
+        .map(code => `<span class="blocker-tag"><span class="blocker-code">${code}</span>${BLOCKER_CODES[code]}</span>`)
+        .join('');
+    }
+
+    // Computed next action — what this case needs right now
+    case 'nextAction': {
+      const action = getNextAction(c);
+      const cls = {
+        urgent:  'action-chip action-urgent',
+        warning: 'action-chip action-warning',
+        active:  'action-chip action-active',
+        waiting: 'action-chip action-waiting',
+        passive: 'action-passive',
+      }[action.urgency] || 'action-passive';
+      return `<span class="${cls}">${action.label}</span>`;
+    }
+
     case 'rm': return c.rmOwner || '—';
-    case 'reviewer': return c.kybReviewer || c.complianceReviewer || '<span style="color:#8c8c8c">Unassigned</span>';
-    case 'kybReviewer': return c.kybReviewer || '<span style="color:#8c8c8c">Unassigned</span>';
-    case 'complianceReviewer': return c.complianceReviewer || '<span style="color:#8c8c8c">Unassigned</span>';
-    case 'aging': return agingHtml(c.stateEntryDate);
-    case 'blocker': return c.blockerCategories.length ? c.blockerCategories.map(x => `<span class="tag tag-orange">${x}</span>`).join(' ') : '<span style="color:#8c8c8c">—</span>';
-    case 'blockerCats': return c.blockerCategories.length ? c.blockerCategories.map(x => `<span class="blocker-tag">${x}</span>`).join(' ') : '<span style="color:#8c8c8c">—</span>';
-    case 'priority': return c.priorityFlag ? '<span class="priority-flag">⚑ Yes</span>' : '—';
-    case 'triggeredBy': return c.triggeredBy ? `<span class="tag tag-blue">${c.triggeredBy}</span>` : '—';
-    case 'lastContact': return c.lastCustomerContact || '<span style="color:#8c8c8c">—</span>';
-    case 'nextFollowup': return c.nextFollowupDate ? (c.nextFollowupDate <= TODAY ? `<span style="color:#ff4d4f;font-weight:600">${c.nextFollowupDate}</span>` : c.nextFollowupDate) : '<span style="color:#8c8c8c">—</span>';
-    case 'responded': return c.customerResponded ? '<span class="tag tag-green">✓ Yes</span>' : '<span class="tag tag-gray">No</span>';
+    case 'kybReviewer': return c.kybReviewer || '<span style="color:#ff4d4f">⚠ Unassigned</span>';
+    case 'complianceReviewer': return c.complianceReviewer || '<span style="color:#8c8c8c">—</span>';
+    case 'triggeredBy': return c.triggeredBy ? `<span class="tag tag-blue">${c.triggeredBy}</span>` : '<span style="color:#d9d9d9">—</span>';
+
+    case 'lastContact':
+      if (!c.lastCustomerContact) return '<span style="color:#d9d9d9">Never</span>';
+      return `<span style="color:#595959">${c.lastCustomerContact}</span>`;
+
+    case 'nextFollowup':
+      if (!c.nextFollowupDate) return '<span style="color:#d9d9d9">—</span>';
+      if (c.nextFollowupDate < TODAY) return `<span class="overdue-date">⚠ ${c.nextFollowupDate}</span>`;
+      if (c.nextFollowupDate === TODAY) return `<span class="today-date">Today</span>`;
+      return c.nextFollowupDate;
+
+    case 'responded':
+      return c.customerResponded
+        ? '<span class="tag tag-green">✓ Responded</span>'
+        : '<span style="color:#8c8c8c">Waiting</span>';
+
     case 'responseDate': return c.responseDate || '—';
-    case 'contactAttempts': return c.contactAttempts || 0;
-    case 'waitingRound': return c.waitingRound || 0;
-    case 'kybSubmissionDate': return c.kybSubmissionDate || '—';
-    case 'complianceStartDate': return c.complianceStartDate || '—';
+    case 'contactAttempts': return `<span style="font-weight:600">${c.contactAttempts || 0}</span>`;
+    case 'waitingRound': return c.waitingRound > 0
+      ? `<span class="tag tag-orange">Round ${c.waitingRound}</span>`
+      : '<span style="color:#d9d9d9">—</span>';
+
+    case 'kybSubmissionDate': return c.kybSubmissionDate || '<span style="color:#d9d9d9">—</span>';
+    case 'complianceStartDate': return c.complianceStartDate || '<span style="color:#d9d9d9">—</span>';
     case 'registrationDate': return c.registrationDate || '—';
+
     case 'totalDays': {
       const reg = new Date(c.registrationDate);
       const end = c.decisionDate ? new Date(c.decisionDate) : new Date(TODAY);
-      return Math.floor((end - reg) / 86400000) + 'd';
+      const days = Math.floor((end - reg) / 86400000);
+      const cls = days > 7 ? 'style="color:#ff4d4f;font-weight:700"' : days > 5 ? 'style="color:#fa8c16"' : '';
+      return `<span ${cls}>${days}d</span>`;
     }
+
     default: return '—';
   }
 }
 
 const COL_LABELS = {
-  id: 'Case ID', company: 'Company', state: 'State', rm: 'RM Owner',
-  reviewer: 'Reviewer', kybReviewer: 'KYB Reviewer', complianceReviewer: 'Compliance Reviewer',
-  aging: 'Aging', blocker: 'Blockers', blockerCats: 'Blockers', priority: 'Priority',
-  triggeredBy: 'Triggered By', lastContact: 'Last Contact', nextFollowup: 'Next Follow-up',
-  responded: 'Responded', responseDate: 'Response Date', contactAttempts: 'Attempts',
-  waitingRound: 'Round', kybSubmissionDate: 'KYB Submitted', complianceStartDate: 'Compliance Start',
-  registrationDate: 'Registered', totalDays: 'Total Days',
+  id: 'Case ID',
+  company: 'Company',
+  state: 'State',
+  currentOwner: 'Current Owner',
+  nextAction: 'Next Action',
+  aging: 'Aging',
+  blockerFull: 'Blocker',
+  rm: 'RM',
+  kybReviewer: 'KYB Reviewer',
+  complianceReviewer: 'Compliance',
+  triggeredBy: 'Triggered By',
+  lastContact: 'Last Contact',
+  nextFollowup: 'Follow-up Date',
+  responded: 'Response',
+  responseDate: 'Response Date',
+  contactAttempts: 'Attempts',
+  waitingRound: 'Wait Round',
+  kybSubmissionDate: 'KYB Submitted',
+  complianceStartDate: 'Comp. Start',
+  registrationDate: 'Registered',
+  totalDays: 'Total Days',
 };
 
 // ── Render table ──
 function renderTable() {
   const cfg = VIEW_CONFIG[currentView];
-  const role = currentRole;
-  let rows = CASES.filter(c => cfg.filter(c, role));
+  let rows = CASES.filter(c => cfg.filter(c, currentRole));
 
-  // Filter by search
   if (searchText) {
     const s = searchText.toLowerCase();
-    rows = rows.filter(c => c.companyName.toLowerCase().includes(s) || c.id.toLowerCase().includes(s) || c.customerName.toLowerCase().includes(s));
+    rows = rows.filter(c =>
+      c.companyName.toLowerCase().includes(s) ||
+      c.id.toLowerCase().includes(s) ||
+      c.customerName.toLowerCase().includes(s)
+    );
   }
-  // Filter by state
   if (stateFilter) {
     rows = rows.filter(c => c.currentState === stateFilter);
   }
 
-  // Default sort: red first, then days desc
-  rows.sort((a, b) => {
-    const af = agingFlag(getDaysInState(a.stateEntryDate));
-    const bf = agingFlag(getDaysInState(b.stateEntryDate));
-    const order = { red: 0, yellow: 1, green: 2 };
-    if (order[af] !== order[bf]) return order[af] - order[bf];
-    return getDaysInState(b.stateEntryDate) - getDaysInState(a.stateEntryDate);
-  });
+  rows.sort(cfg.sort || defaultSort);
 
   const cols = cfg.columns;
   const thead = `<tr>${cols.map(c => `<th>${COL_LABELS[c] || c}</th>`).join('')}</tr>`;
   const tbody = rows.length === 0
     ? `<tr><td colspan="${cols.length}" class="table-empty">No cases match this view.</td></tr>`
-    : rows.map(r => `<tr onclick="window.location='case-detail.html?id=${r.id}'">${cols.map(c => `<td>${renderCell(c, r)}</td>`).join('')}</tr>`).join('');
+    : rows.map(r => {
+        const rowClass = r.customerResponded ? 'row-returned' : '';
+        return `<tr class="${rowClass}" onclick="window.location='case-detail.html?id=${r.id}'">${cols.map(c => `<td>${renderCell(c, r)}</td>`).join('')}</tr>`;
+      }).join('');
 
   document.getElementById('table-head').innerHTML = thead;
   document.getElementById('table-body').innerHTML = tbody;
   document.getElementById('result-count').textContent = `${rows.length} case${rows.length !== 1 ? 's' : ''}`;
 
-  // Stats for management view
+  // Management Overview: stage bottleneck analysis for Winston
   const statsBar = document.getElementById('stats-bar');
   if (statsBar) {
     if (currentView === 'mgmt') {
-      const active = CASES.filter(c => !TERMINAL_STATES.includes(c.currentState));
-      const red = active.filter(c => agingFlag(getDaysInState(c.stateEntryDate)) === 'red').length;
-      const waiting = active.filter(c => c.currentState === 'Waiting Customer').length;
-      const returned = active.filter(c => c.customerResponded).length;
-      statsBar.innerHTML = `
-        <div class="stat-card"><div class="stat-label">Active Cases</div><div class="stat-value">${active.length}</div></div>
-        <div class="stat-card"><div class="stat-label">Overdue 🔴</div><div class="stat-value red">${red}</div></div>
-        <div class="stat-card"><div class="stat-label">Waiting Customer</div><div class="stat-value orange">${waiting}</div></div>
-        <div class="stat-card"><div class="stat-label">Returned — Pickup Needed</div><div class="stat-value${returned ? ' red' : ' green'}">${returned}</div></div>
-      `;
-      statsBar.style.display = 'flex';
+      renderMgmtStats(statsBar);
+      statsBar.style.display = 'block';
     } else {
       statsBar.style.display = 'none';
     }
   }
+}
+
+// ── Stage bottleneck view for Winston ──
+function renderMgmtStats(el) {
+  const active = CASES.filter(c => !TERMINAL_STATES.includes(c.currentState));
+  const red = active.filter(c => agingFlag(getDaysInState(c.stateEntryDate)) === 'red').length;
+  const waiting = active.filter(c => c.currentState === 'Waiting Customer').length;
+  const returned = active.filter(c => c.customerResponded).length;
+  const unassigned = active.filter(c => getCurrentOwner(c) === null).length;
+
+  const PIPELINE_STAGES = [
+    'KYB Submitted', 'KYB Review', 'Waiting Customer', 'Compliance Review', 'EDD', 'Registration Pending',
+  ];
+  const STAGE_RESPONSIBLE = {
+    'Registration Pending': 'Selina Chang (RM)',
+    'KYB Submitted':        'Ariana (KYB)',
+    'KYB Review':           'Ariana (KYB)',
+    'Waiting Customer':     'Selina Chang (RM)',
+    'Compliance Review':    'SG Compliance',
+    'EDD':                  'SG Compliance',
+  };
+
+  const stageRows = PIPELINE_STAGES.map(stage => {
+    const cases = active.filter(c => c.currentState === stage);
+    if (cases.length === 0) return '';
+    const overdueCount = cases.filter(c => agingFlag(getDaysInState(c.stateEntryDate)) === 'red').length;
+    const avgDays = (cases.reduce((s, c) => s + getDaysInState(c.stateEntryDate), 0) / cases.length).toFixed(1);
+    const isBottleneck = overdueCount >= 2 || (cases.length >= 3 && overdueCount >= 1);
+    const rowStyle = isBottleneck ? ' class="bottleneck-row"' : '';
+    const overdueHtml = overdueCount > 0
+      ? `<span style="color:#ff4d4f;font-weight:700">${overdueCount} 🔴</span>`
+      : `<span style="color:#52c41a">0</span>`;
+    const bottleneckBadge = isBottleneck ? ' <span class="tag tag-red" style="font-size:10px">bottleneck</span>' : '';
+    return `<tr${rowStyle}>
+      <td><span class="${stateTagClass(stage)}">${stage}</span>${bottleneckBadge}</td>
+      <td style="text-align:center;font-weight:700">${cases.length}</td>
+      <td style="text-align:center">${overdueHtml}</td>
+      <td style="text-align:center;color:#595959">${avgDays}d avg</td>
+      <td style="color:#595959;font-size:12px">${STAGE_RESPONSIBLE[stage] || '—'}</td>
+    </tr>`;
+  }).filter(Boolean).join('');
+
+  el.innerHTML = `
+    <div style="display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap">
+      <div class="stat-card"><div class="stat-label">Active Cases</div><div class="stat-value">${active.length}</div></div>
+      <div class="stat-card"><div class="stat-label">Overdue 🔴</div><div class="stat-value red">${red}</div></div>
+      <div class="stat-card"><div class="stat-label">Waiting Customer</div><div class="stat-value orange">${waiting}</div></div>
+      <div class="stat-card"><div class="stat-label">⚡ Pickup Needed</div><div class="stat-value ${returned ? 'red' : 'green'}">${returned}</div></div>
+      ${unassigned ? `<div class="stat-card" style="border:1px solid #ffa39e"><div class="stat-label" style="color:#ff4d4f">⚠ Unassigned</div><div class="stat-value red">${unassigned}</div></div>` : ''}
+    </div>
+    <div style="background:#fff;border-radius:8px;padding:16px 20px;box-shadow:0 1px 3px rgba(0,0,0,0.05)">
+      <div style="font-size:11px;font-weight:600;color:#8c8c8c;text-transform:uppercase;letter-spacing:0.6px;margin-bottom:10px">Stage Bottleneck Analysis</div>
+      <table class="stage-breakdown">
+        <thead><tr>
+          <th>Stage</th><th style="text-align:center">Cases</th>
+          <th style="text-align:center">Overdue</th>
+          <th style="text-align:center">Avg Days</th>
+          <th>Responsible</th>
+        </tr></thead>
+        <tbody>${stageRows}</tbody>
+      </table>
+    </div>
+  `;
 }
 
 // ── Nav switching ──
@@ -565,13 +788,10 @@ function switchView(view) {
   const pageTitleEl = document.getElementById('page-title');
   if (pageTitleEl) pageTitleEl.textContent = VIEW_CONFIG[view]?.label || view;
 
-  const returned = CASES.filter(c => c.customerResponded).length;
-  if (view === 'returned' && returned > 0) {
-    const alertEl = document.getElementById('returned-alert');
-    if (alertEl) alertEl.style.display = 'flex';
-  } else {
-    const alertEl = document.getElementById('returned-alert');
-    if (alertEl) alertEl.style.display = 'none';
+  const alertEl = document.getElementById('returned-alert');
+  if (alertEl) {
+    const returned = CASES.filter(c => c.customerResponded).length;
+    alertEl.style.display = (view === 'returned' && returned > 0) ? 'flex' : 'none';
   }
 
   renderTable();
@@ -586,25 +806,18 @@ function switchRole(role) {
 }
 
 // ── Search / filter ──
-function onSearch(val) {
-  searchText = val;
-  renderTable();
-}
+function onSearch(val) { searchText = val; renderTable(); }
+function onStateFilter(val) { stateFilter = val; renderTable(); }
 
-function onStateFilter(val) {
-  stateFilter = val;
-  renderTable();
-}
-
-// ── Badge counts for sidebar ──
+// ── Sidebar badges ──
 function updateBadges() {
   const returned = CASES.filter(c => c.customerResponded).length;
   const overdue = CASES.filter(c => agingFlag(getDaysInState(c.stateEntryDate)) === 'red' && !TERMINAL_STATES.includes(c.currentState)).length;
   const waitingCust = CASES.filter(c => c.currentState === 'Waiting Customer').length;
-  const el = (id) => document.getElementById(id);
+  const el = id => document.getElementById(id);
   if (el('badge-returned')) el('badge-returned').textContent = returned || '';
-  if (el('badge-overdue')) el('badge-overdue').textContent = overdue || '';
-  if (el('badge-waiting')) el('badge-waiting').textContent = waitingCust || '';
+  if (el('badge-overdue'))  el('badge-overdue').textContent = overdue || '';
+  if (el('badge-waiting'))  el('badge-waiting').textContent = waitingCust || '';
 }
 
 // ── Init for index.html ──
@@ -631,9 +844,5 @@ function closeDrawer(id) {
   document.getElementById(id)?.classList.remove('open');
   document.getElementById('drawer-backdrop')?.classList.remove('open');
 }
-function openModal(id) {
-  document.getElementById(id)?.classList.add('open');
-}
-function closeModal(id) {
-  document.getElementById(id)?.classList.remove('open');
-}
+function openModal(id)  { document.getElementById(id)?.classList.add('open'); }
+function closeModal(id) { document.getElementById(id)?.classList.remove('open'); }
