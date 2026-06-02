@@ -561,7 +561,7 @@ function roleLabel() {
 function renderCell(col, c) {
   switch (col) {
     case 'id':
-      return `<a href="case-detail.html?id=${c.id}" style="color:#1677ff;font-weight:600">${c.id}</a>${c.priorityFlag ? ' <span class="priority-flag" title="Priority">⚑</span>' : ''}`;
+      return `<a href="case-detail.html?id=${c.id}" style="color:#1677ff;font-weight:600">${c.id}</a>`;
 
     case 'company':
       return `<strong>${c.companyName}</strong>`;

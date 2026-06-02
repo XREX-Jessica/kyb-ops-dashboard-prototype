@@ -84,9 +84,6 @@ tbody td { padding: 10px 14px; font-size: 13px; color: #1a1a1a; vertical-align: 
 .tag-cyan { background: #e6fffb; color: #13c2c2; border: 1px solid #87e8de; }
 
 
-/* ── Priority flag ── */
-.priority-flag { color: #ff4d4f; font-size: 13px; }
-
 /* ── Drawer ── */
 .drawer-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 1000; opacity: 0; pointer-events: none; transition: opacity 0.25s; }
 .drawer-backdrop.open { opacity: 1; pointer-events: all; }
